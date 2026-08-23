@@ -25,6 +25,8 @@ describe("componentes de interfaz JAC", () => {
 
   it("expone la navegación principal del panel para los módulos comunitarios", () => {
     render(<JacShell eyebrow="Prueba" title="Panel" description="Descripción de prueba"><p>Contenido</p></JacShell>);
+    expect(screen.getByRole("img", { name: "Emblema JAC Bellavista 1991" })).toBeVisible();
+    expect(screen.getAllByText(/Todos Somos Comunidad/i)[0]).toBeVisible();
     const nav = screen.getByLabelText("Navegación principal");
     expect(nav).toHaveTextContent("Plan comunal");
     expect(nav).toHaveTextContent("Obligaciones");

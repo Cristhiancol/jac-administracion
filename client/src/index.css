@@ -123,7 +123,8 @@
 @layer components {
   .container { width: 100%; margin-inline: auto; padding-inline: 1rem; }
   .flex { min-height: 0; min-width: 0; }
-  .jac-grid { background-image: linear-gradient(to right, rgb(6 78 59 / 0.045) 1px, transparent 1px), linear-gradient(to bottom, rgb(6 78 59 / 0.045) 1px, transparent 1px); background-size: 32px 32px; }
+  .jac-grid { background-image: linear-gradient(to right, rgb(15 76 129 / 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgb(27 138 90 / 0.05) 1px, transparent 1px); background-size: 36px 36px; }
+  .jac-hero-gradient { background: linear-gradient(135deg, #0F4C81 0%, #1B8A5A 54%, #166534 100%); }
   @media (min-width: 640px) { .container { padding-inline: 1.5rem; } }
   @media (min-width: 1024px) { .container { max-width: 1280px; padding-inline: 2rem; } }
 }

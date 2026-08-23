@@ -25,12 +25,12 @@ export default function Home() {
 
   return (
     <JacShell eyebrow="Panel principal" title="Gestión comunal con trazabilidad" description="Un espacio de coordinación para convertir las metas de la JAC en actividades, obligaciones y movimientos verificables.">
-      <section className="jac-grid relative overflow-hidden rounded-[2rem] bg-emerald-950 px-6 py-7 text-white shadow-[0_25px_70px_-35px_rgba(6,78,59,.75)] sm:px-9 sm:py-10">
+      <section className="jac-grid jac-hero-gradient relative overflow-hidden rounded-[2rem] px-6 py-7 text-white shadow-[0_25px_70px_-35px_rgba(15,76,129,.55)] sm:px-9 sm:py-10">
         <div className="absolute -right-12 -top-24 h-64 w-64 rounded-full bg-amber-300/15 blur-3xl" />
         <div className="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
           <div className="max-w-2xl">
             <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-200"><Landmark className="h-4 w-4" /> Localidad de Usme</div>
-            <h2 className="font-serif text-3xl font-bold leading-tight sm:text-4xl">Junta de Acción Comunal Barrio Usme Centro</h2>
+            <h2 className="font-serif text-3xl font-bold leading-tight sm:text-4xl">Junta de Acción Comunal Bellavista <span className="text-amber-300">1991</span></h2>
             <p className="mt-4 max-w-xl text-sm leading-6 text-emerald-50/75">{profileVerified ? "La ficha institucional cuenta con NIT, personería jurídica, código comunal y ubicación confirmados por la Directiva." : "La ficha institucional se encuentra disponible para revisión de la Directiva y conserva los campos pendientes de evidencia."}</p>
           </div>
           <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">

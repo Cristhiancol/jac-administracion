@@ -6,6 +6,7 @@ import React, { type ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
+import { JacLogo } from "@/components/JacLogo";
 
 const navigation = [
   { href: "/", label: "Inicio", icon: Landmark },
@@ -26,14 +27,8 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
     <div className="min-h-screen bg-background text-foreground selection:bg-[#f5c451]/40">
       <header className="sticky top-0 z-50 border-b border-emerald-950/5 bg-background/90 backdrop-blur-xl">
         <div className="container flex h-18 items-center justify-between gap-4 py-3">
-          <Link href="/" className="group flex min-w-0 items-center gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-emerald-700 text-white shadow-[0_10px_22px_-12px_rgba(4,120,87,.95)] transition-transform duration-200 group-hover:-rotate-3">
-              <Landmark className="h-5 w-5" />
-            </span>
-            <span className="min-w-0">
-              <span className="block truncate font-serif text-sm font-bold tracking-tight text-emerald-950 sm:text-base">JAC Usme Centro</span>
-              <span className="block truncate text-[10px] font-semibold uppercase tracking-[0.16em] text-emerald-700">Gestión comunitaria</span>
-            </span>
+          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="Inicio JAC Bellavista 1991">
+            <JacLogo className="transition-transform duration-200 group-hover:-rotate-2" />
           </Link>
 
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegación principal">
@@ -46,7 +41,7 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
                   href={item.href}
                   className={cn(
                     "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition-colors",
-                    active ? "bg-emerald-100 text-emerald-900" : "text-emerald-950/65 hover:bg-emerald-50 hover:text-emerald-900",
+                    active ? "bg-sky-100 text-[#0F4C81]" : "text-emerald-950/65 hover:bg-emerald-50 hover:text-[#0F4C81]",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -65,7 +60,7 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
                 Salir{user?.name ? ` · ${user.name.split(" ")[0]}` : ""}
               </Button>
             ) : (
-              <Button onClick={startLogin} className="rounded-xl bg-emerald-700 text-white shadow-sm hover:bg-emerald-800">
+              <Button onClick={startLogin} className="rounded-xl bg-[#0F4C81] text-white shadow-sm hover:bg-[#0b3b65]">
                 Ingresar
               </Button>
             ))}
@@ -100,8 +95,8 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
 
       <footer className="border-t border-emerald-950/5 bg-white/50">
         <div className="container flex flex-col justify-between gap-2 py-5 text-xs text-emerald-950/55 sm:flex-row">
-          <span>Junta de Acción Comunal Barrio Usme Centro / Localidad de Usme</span>
-          <span>Ficha institucional y trazabilidad comunitaria</span>
+          <span>JAC Bellavista 1991 · Localidad de Usme</span>
+          <span>Todos Somos Comunidad · Trazabilidad comunitaria</span>
         </div>
       </footer>
     </div>
