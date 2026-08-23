@@ -25,11 +25,15 @@ describe("componentes de interfaz JAC", () => {
 
   it("expone la navegación principal del panel para los módulos comunitarios", () => {
     render(<JacShell eyebrow="Prueba" title="Panel" description="Descripción de prueba"><p>Contenido</p></JacShell>);
-    expect(
+    const officialEmblem =
       screen.getAllByRole("img", {
         name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i,
-      })[0],
-    ).toBeVisible();
+      })[0];
+    expect(officialEmblem).toBeVisible();
+    expect(officialEmblem).toHaveAttribute(
+      "src",
+      "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp",
+    );
     const nav = screen.getByLabelText("Navegación principal");
     const modules = [
       "Inicio",

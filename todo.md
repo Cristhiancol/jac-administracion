@@ -61,3 +61,18 @@
 - [x] Compilar y reiniciar la vista previa de la versión sincronizada.
 - [x] Verificar animaciones deportivas, matriz del Plan de Trabajo 2026–2030, total de gastos $9.739.678, dignatarios institucionales y logo oficial Bellavista.
 - [x] Validar con prueba automatizada el contenido estratégico 2026–2030 de la matriz del Plan de Trabajo.
+- [x] Preparar y publicar el activo oficial de logo Bellavista proporcionado para uso seguro en la aplicación.
+- [x] Sustituir el logo actual por el emblema oficial en la cabecera, vistas institucionales, módulos y carnets QR.
+- [x] Validar visualmente la identidad actualizada en escritorio y móvil, ejecutar pruebas y actualizar la vista previa.
+- [x] Comprobar en móvil la cabecera y ficha institucional con el logo oficial actualizado, complementado por una prueba aislada del carnet QR.
+- [x] Renderizar y comprobar de forma automatizada el carnet QR de un afiliado, verificando el logo oficial en el estado interactivo.
+- [x] Evaluar el validador móvil con Chromium y sustituirlo por una prueba aislada repetible, sin dependencia de autenticación externa.
+- [x] Extraer y probar de forma aislada el carnet QR oficial para verificar su emblema sin depender de autenticación externa.
+- [x] Añadir una prueba de interacción de Afiliados que abra el carnet QR y confirme el logo oficial dentro del overlay real.
+- [x] Abrir el carnet QR por parámetro de vista administrativa y capturar el overlay oficial en móvil dentro de /afiliados.
+- [x] Probar que `?carnet=<cédula conocida>` abre el overlay real con el logo oficial del afiliado cargado.
+- [x] Aislar los renders de la prueba de parámetro QR para evitar tarjetas duplicadas entre casos de interfaz.
+- [x] Consultar una cédula real de afiliado y reutilizarla en la captura móvil del carnet QR abierto.
+- [ ] Sincronizar en Git los cambios de identidad visual y carnets validados.
+- [ ] Revisar e integrar sin pérdida la actualización forzada de `user_github/main` antes de publicar el logo y los carnets actualizados.
+- [x] Corregir la compatibilidad JSX del componente de logo oficial en las pruebas de interfaz.

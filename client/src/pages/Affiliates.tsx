@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { JacShell } from "@/components/jac/JacShell";
+import { DigitalAffiliateCard } from "@/components/affiliate/DigitalAffiliateCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -54,7 +55,10 @@ export default function Affiliates() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [formData, setFormData] = useState<AffiliateFormData>(initialFormState);
-  const [activeQr, setActiveQr] = useState<string | null>(null);
+  const [activeQr, setActiveQr] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return new URLSearchParams(window.location.search).get("carnet");
+  });
 
   // tRPC Queries & Mutations
   const { data: affiliates = [], refetch, isLoading } = trpc.affiliates.list.useQuery();
@@ -272,18 +276,7 @@ export default function Affiliates() {
                             </button>
                           </div>
                           {activeQr === affiliate.cedula && (
-                            <div className="absolute right-10 mt-2 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center">
-                              <img
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(
-                                  affiliate.cedula
-                                )}`}
-                                alt="QR Code"
-                                className="w-24 h-24"
-                              />
-                              <span className="text-xs text-gray-500 mt-1">
-                                {affiliate.cedula}
-                              </span>
-                            </div>
+                            <DigitalAffiliateCard affiliate={affiliate} />
                           )}
                         </td>
                       )}
