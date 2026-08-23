@@ -37,3 +37,5 @@
 - [x] Sustituir el mapa provisional por el embed oficial confirmado con coordenadas 4.504752602911481, -74.1068319118239 y enlace de Google Maps proporcionado por la Directiva.
 - [x] Eliminar los mensajes residuales de validación pendiente del inicio y pie de página cuando la ficha institucional esté verificada.
 - [ ] Verificar el remoto GitHub conectado y sincronizar el checkpoint final de la PWA JAC sin sobrescribir cambios remotos.
+- [ ] Comparar la rama local con `user_github/main` después de un fetch para impedir sobrescritura de cambios remotos.
+- [ ] Publicar el commit final pendiente y documentar el hash remoto confirmado de la sincronización GitHub.
