@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="blueGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F4C81" />
+      <stop offset="100%" stop-color="#1E3A8A" />
+    </linearGradient>
+    <linearGradient id="greenGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B8A5A" />
+      <stop offset="100%" stop-color="#166534" />
+    </linearGradient>
+    <linearGradient id="goldGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FACC15" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Ring -->
+  <circle cx="60" cy="60" r="56" fill="url(#blueGradFav)" stroke="#FACC15" stroke-width="3" />
+  <circle cx="60" cy="60" r="46" fill="url(#greenGradFav)" stroke="#FFFFFF" stroke-width="1.5" />
+
+  <!-- Usme Mountains -->
+  <path d="M14 74 Q 38 52, 60 64 Q 82 48, 106 74 Z" fill="#15803D" opacity="0.9" />
+  <path d="M14 80 Q 40 62, 60 72 Q 80 58, 106 80 Z" fill="#166534" />
+
+  <!-- Sun -->
+  <circle cx="60" cy="38" r="11" fill="url(#goldGradFav)" />
+
+  <!-- Handshake Emblem -->
+  <g transform="translate(60, 66) scale(1)">
+    <!-- Left Arm -->
+    <path d="M-34 4 L-18 4 L-10 -4 L-18 -12 L-34 -12 Z" fill="#0F4C81" stroke="#FFFFFF" stroke-width="1" />
+    <!-- Right Arm -->
+    <path d="M34 4 L18 4 L10 -4 L18 -12 L34 -12 Z" fill="#1B8A5A" stroke="#FFFFFF" stroke-width="1" />
+    <!-- Left Hand -->
+    <path d="M-16 -4 C-12 -14, -2 -14, 0 -8 C2 -6, -2 4, -10 6 Z" fill="url(#goldGradFav)" stroke="#78350F" stroke-width="1" />
+    <!-- Right Hand -->
+    <path d="M16 -4 C12 -14, 2 -14, 0 -8 C-2 -6, 2 4, 10 6 Z" fill="#FBBF24" stroke="#78350F" stroke-width="1" />
+    <!-- Fingers -->
+    <path d="M-7 -4 Q0 -2 7 -4" stroke="#78350F" stroke-width="1.5" stroke-linecap="round" />
+    <path d="M-5 0 Q0 2 5 0" stroke="#78350F" stroke-width="1.5" stroke-linecap="round" />
+  </g>
+
+  <!-- Ribbon -->
+  <path d="M16 94 Q60 106 104 94 L98 112 Q60 120 22 112 Z" fill="#0F4C81" stroke="#FACC15" stroke-width="1.2" />
+  <text x="60" y="106" text-anchor="middle" fill="#FACC15" font-size="6" font-weight="bold" font-family="sans-serif">
+    1991
+  </text>
+</svg>
