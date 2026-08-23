@@ -73,6 +73,10 @@ El portal de la **Alcaldía Local de Usme** presenta contenido público de notic
 
 ## Sincronización con GitHub
 
+## Verificación de vista previa
+
+La vista previa se actualizó después de comparar la copia local con `user_github/main`. Ambas referencias coincidieron en el hash **`16852490e384d445968175bf02d6769311b63d6d`** antes del reinicio del servidor. La interfaz resultante mostró el emblema y el hero de **JAC Bellavista 1991**, confirmando que el entorno de vista previa cargó la versión publicada.
+
 La rama `main` se comparó con `user_github/main` después de actualizar las referencias remotas; la base común y ambos hashes coincidían antes de la publicación final. El commit de sincronización publicado y verificado en GitHub es **`4409c85ca8b2de48208e5ed500babb111cf9b5b8`**. La comprobación posterior confirmó que el hash local y el remoto coincidían y que no quedaban cambios locales.
 
 ## Referencias
