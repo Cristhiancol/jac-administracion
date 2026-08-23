@@ -44,7 +44,7 @@ describe("interacción de carnet QR de afiliados", () => {
   it("abre el overlay real y muestra el emblema oficial actualizado", () => {
     render(<Affiliates />);
 
-    fireEvent.click(screen.getByTitle("Generar QR"));
+    fireEvent.click(screen.getByTitle("Generar QR Carnet"));
 
     const card = screen.getByTestId("affiliate-qr-card");
     expect(within(card).getByText("Carnet digital")).toBeVisible();

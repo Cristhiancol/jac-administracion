@@ -253,24 +253,25 @@ export default function Affiliates() {
                       </td>
                       {isAdmin && (
                         <td className="p-4 text-right">
-                          <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="flex justify-end items-center gap-2">
                             <button
                               onClick={() =>
                                 setActiveQr(activeQr === affiliate.cedula ? null : affiliate.cedula)
                               }
-                              className="p-1.5 text-[#0F4C81] hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-md transition-colors"
-                              title="Generar QR"
+                              className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#0F4C81] bg-blue-50 dark:bg-blue-950 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 transition-colors"
+                              title="Generar QR Carnet"
                             >
-                              <QrCode className="h-4 w-4" />
+                              <QrCode className="h-3.5 w-3.5" />
+                              <span>Carnet QR</span>
                             </button>
                             <button
                               onClick={() => {
-                                if (confirm("¿Estás seguro de eliminar este afiliado?")) {
+                                if (confirm("¿Estás seguro de eliminar este afiliado del Libro?")) {
                                   removeAffiliate.mutate({ id: affiliate.id });
                                 }
                               }}
-                              className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-md transition-colors"
-                              title="Eliminar"
+                              className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-lg transition-colors"
+                              title="Eliminar del Libro"
                             >
                               <Trash2 className="h-4 w-4" />
                             </button>

@@ -75,4 +75,6 @@
 - [x] Consultar una cédula real de afiliado y reutilizarla en la captura móvil del carnet QR abierto.
 - [ ] Sincronizar en Git los cambios de identidad visual y carnets validados.
 - [ ] Revisar e integrar sin pérdida la actualización forzada de `user_github/main` antes de publicar el logo y los carnets actualizados.
+- [x] Adaptar la prueba de carnet QR al control de Afiliados incorporado por la actualización remota y restablecer la suite de fusión.
+- [ ] Confirmar la fusión de `user_github/main`, publicar el hash resultante y comprobar que el árbol de trabajo quede consistente.
 - [x] Corregir la compatibilidad JSX del componente de logo oficial en las pruebas de interfaz.
