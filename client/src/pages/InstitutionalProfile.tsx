@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
-import { BadgeInfo, FileCheck2, Save, ShieldCheck, QrCode, Award } from "lucide-react";
+import { BadgeInfo, FileCheck2, Save, ShieldCheck, QrCode, Award, Users, Crown, ShieldAlert, FileText, CheckCircle2, UserCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { JacLogo } from "@/components/JacLogo";
@@ -46,6 +46,14 @@ const defaultForm: FormState = {
   verificationStatus: "verificado",
   verificationSourceUrl: "https://maps.app.goo.gl/b5LqTjjUv18QpFnY6",
   verificationNotes: "Ficha legal e identidad de la JAC Bellavista 1991 verificada por la Directiva Comunal.",
+};
+
+const JAC_ROLE_LABELS: Record<string, { label: string; icon: typeof Crown; color: string }> = {
+  directiva: { label: "Directiva / Presidencia", icon: Crown, color: "bg-amber-100 text-amber-900 border-amber-300 dark:bg-amber-950 dark:text-amber-300" },
+  tesorero_fiscal: { label: "Tesorería & Fiscalía", icon: ShieldAlert, color: "bg-emerald-100 text-emerald-900 border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300" },
+  secretario: { label: "Secretaría General", icon: FileText, color: "bg-blue-100 text-blue-900 border-blue-300 dark:bg-blue-950 dark:text-blue-300" },
+  coordinador_comite: { label: "Coordinación de Comité", icon: UserCheck, color: "bg-purple-100 text-purple-900 border-purple-300 dark:bg-purple-950 dark:text-purple-300" },
+  afiliado: { label: "Afiliado General", icon: Users, color: "bg-gray-100 text-gray-800 border-gray-300 dark:bg-gray-800 dark:text-gray-300" },
 };
 
 export default function InstitutionalProfile() {
@@ -107,7 +115,7 @@ export default function InstitutionalProfile() {
     <JacShell
       eyebrow="Gobierno y Personería Jurídica"
       title="Ficha e Identidad Institucional"
-      description="Personería jurídica de 1991, NIT, código comunal y modelo de carnet digital oficial para afiliados."
+      description="Personería jurídica de 1991, NIT, código comunal, cuadro de dignatarios y carnet digital oficial."
     >
       <div className="grid gap-6 xl:grid-cols-[1fr_.95fr]">
         {/* Form Card */}
@@ -135,7 +143,7 @@ export default function InstitutionalProfile() {
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <Field
-                  label="NIT Institutional"
+                  label="NIT Institucional"
                   value={form.nit}
                   onChange={(value) => update("nit", value)}
                   placeholder="830.061.828-3"
@@ -318,7 +326,157 @@ export default function InstitutionalProfile() {
           </Card>
         </div>
       </div>
+
+      {/* DIGNATARIOS & ADMINISTRATIVE USER ASSIGNMENT SECTION */}
+      <div className="mt-8">
+        <DignatariosAssignmentSection />
+      </div>
     </JacShell>
+  );
+}
+
+function DignatariosAssignmentSection() {
+  const { isAuthenticated } = useAuth();
+  const dignatariosQuery = trpc.institutional.dignatarios.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
+  const utils = trpc.useUtils();
+
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [selectedJacRole, setSelectedJacRole] = useState<"directiva" | "coordinador_comite" | "tesorero_fiscal" | "secretario" | "afiliado">("directiva");
+  const [selectedRole, setSelectedRole] = useState<"admin" | "user">("admin");
+
+  const assignRoleMutation = trpc.institutional.assignRole.useMutation({
+    onSuccess: async () => {
+      await utils.institutional.dignatarios.invalidate();
+      toast.success("Cargo administrativo y rol asignado correctamente.");
+    },
+    onError: (error) => toast.error(error.message),
+  });
+
+  const dignatarios = dignatariosQuery.data ?? [];
+
+  const handleAssign = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedUserId) {
+      toast.error("Selecciona un usuario para asignar cargo.");
+      return;
+    }
+    assignRoleMutation.mutate({
+      userId: Number(selectedUserId),
+      jacRole: selectedJacRole,
+      role: selectedRole,
+    });
+  };
+
+  return (
+    <Card className="border-border bg-card shadow-sm rounded-2xl overflow-hidden">
+      <div className="border-b border-border bg-[#0F4C81]/10 dark:bg-blue-950/40 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="font-serif text-xl font-extrabold text-foreground flex items-center gap-2">
+            <Crown className="h-5 w-5 text-amber-500" />
+            Cuadro de Dignatarios & Asignación de Roles Administrativos
+          </h3>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+            Asignación de cargos para la Directiva, Fiscalía, Secretaría General y Coordinaciones de Comité.
+          </p>
+        </div>
+      </div>
+
+      <CardContent className="p-6 space-y-6">
+        {/* Role Assignment Form */}
+        {isAuthenticated && (
+          <form onSubmit={handleAssign} className="p-5 bg-muted/40 rounded-xl border border-border space-y-4">
+            <p className="text-xs font-extrabold uppercase tracking-wider text-[#0F4C81] dark:text-blue-400">
+              Asignar o Modificar Cargo Administrativo
+            </p>
+            <div className="grid gap-4 sm:grid-cols-3">
+              <div>
+                <Label className="text-xs font-bold mb-1.5 block">Usuario / Dignatario *</Label>
+                <select
+                  value={selectedUserId}
+                  onChange={(e) => setSelectedUserId(e.target.value)}
+                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]"
+                  required
+                >
+                  <option value="">Seleccionar dignatario...</option>
+                  {dignatarios.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name || d.email} ({d.jacRole})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <Label className="text-xs font-bold mb-1.5 block">Cargo JAC *</Label>
+                <select
+                  value={selectedJacRole}
+                  onChange={(e) => setSelectedJacRole(e.target.value as any)}
+                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]"
+                >
+                  <option value="directiva">Directiva / Presidencia</option>
+                  <option value="tesorero_fiscal">Tesorería & Fiscalía</option>
+                  <option value="secretario">Secretaría General</option>
+                  <option value="coordinador_comite">Coordinación de Comité</option>
+                  <option value="afiliado">Afiliado General</option>
+                </select>
+              </div>
+
+              <div>
+                <Label className="text-xs font-bold mb-1.5 block">Permiso de Plataforma *</Label>
+                <select
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value as any)}
+                  className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]"
+                >
+                  <option value="admin">Administrador (Control Total)</option>
+                  <option value="user">Usuario Estándar (Lectura/Registro)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <Button
+                type="submit"
+                disabled={assignRoleMutation.isPending}
+                className="rounded-xl bg-[#1B8A5A] text-white hover:bg-[#166534] font-bold px-6"
+              >
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                {assignRoleMutation.isPending ? "Asignando..." : "Guardar Asignación de Cargo"}
+              </Button>
+            </div>
+          </form>
+        )}
+
+        {/* Dignatarios Directory Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {dignatarios.map((dignatario) => {
+            const config = JAC_ROLE_LABELS[dignatario.jacRole] ?? JAC_ROLE_LABELS.afiliado;
+            const Icon = config.icon;
+            return (
+              <Card key={dignatario.id} className="border-border bg-card shadow-xs rounded-xl overflow-hidden">
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className={`p-2 rounded-xl border text-xs font-bold flex items-center gap-1.5 ${config.color}`}>
+                      <Icon className="h-4 w-4" />
+                      {config.label.split("/")[0]}
+                    </span>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-muted text-muted-foreground">
+                      {dignatario.role}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-bold text-foreground text-sm">{dignatario.name || "Dignatario Registrado"}</p>
+                    <p className="text-xs text-muted-foreground truncate">{dignatario.email || "Sin correo"}</p>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

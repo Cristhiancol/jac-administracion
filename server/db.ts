@@ -209,6 +209,46 @@ export async function getAssignableJacUsers() {
     .limit(100);
 }
 
+export async function getJacDignatarios() {
+  const db = await getDb();
+  if (!db) {
+    return [
+      { id: 1, name: "Presidente Directiva JAC", email: "directiva@bellavista1991.org", role: "admin" as const, jacRole: "directiva" as const, lastSignedIn: new Date() },
+      { id: 2, name: "Tesorero / Fiscal Comunal", email: "tesoreria@bellavista1991.org", role: "admin" as const, jacRole: "tesorero_fiscal" as const, lastSignedIn: new Date() },
+      { id: 3, name: "Secretario General JAC", email: "secretaria@bellavista1991.org", role: "user" as const, jacRole: "secretario" as const, lastSignedIn: new Date() },
+      { id: 4, name: "Coordinador Comité Deportes", email: "deportes@bellavista1991.org", role: "user" as const, jacRole: "coordinador_comite" as const, lastSignedIn: new Date() },
+    ];
+  }
+  const result = await db
+    .select({ id: users.id, name: users.name, email: users.email, role: users.role, jacRole: users.jacRole, lastSignedIn: users.lastSignedIn })
+    .from(users)
+    .orderBy(users.name)
+    .limit(100);
+
+  if (result.length === 0) {
+    return [
+      { id: 1, name: "Presidente Directiva JAC", email: "directiva@bellavista1991.org", role: "admin" as const, jacRole: "directiva" as const, lastSignedIn: new Date() },
+      { id: 2, name: "Tesorero / Fiscal Comunal", email: "tesoreria@bellavista1991.org", role: "admin" as const, jacRole: "tesorero_fiscal" as const, lastSignedIn: new Date() },
+      { id: 3, name: "Secretario General JAC", email: "secretaria@bellavista1991.org", role: "user" as const, jacRole: "secretario" as const, lastSignedIn: new Date() },
+      { id: 4, name: "Coordinador Comité Deportes", email: "deportes@bellavista1991.org", role: "user" as const, jacRole: "coordinador_comite" as const, lastSignedIn: new Date() },
+    ];
+  }
+  return result;
+}
+
+export async function updateUserJacRole(
+  userId: number,
+  jacRole: "directiva" | "coordinador_comite" | "tesorero_fiscal" | "secretario" | "afiliado",
+  role: "user" | "admin"
+) {
+  const db = await getDb();
+  if (db) {
+    await db.update(users).set({ jacRole, role, updatedAt: new Date() }).where(eq(users.id, userId));
+  } else {
+    console.log("[Users] Role updated in local mode:", userId, jacRole, role);
+  }
+}
+
 export async function createCommission(input: {
   name: string;
   purpose?: string | null;

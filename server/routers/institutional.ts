@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 import { institutionalProfileSchema } from "@shared/jac-forms";
-import { getInstitutionalProfile, saveInstitutionalProfile } from "../db";
+import { getInstitutionalProfile, saveInstitutionalProfile, getJacDignatarios, updateUserJacRole } from "../db";
 import { jacRoleProcedure, protectedProcedure, router } from "../_core/trpc";
 
 export const institutionalRouter = router({
@@ -10,5 +11,18 @@ export const institutionalRouter = router({
     .mutation(({ ctx, input }) => {
       if (!ctx.user) throw new TRPCError({ code: "UNAUTHORIZED" });
       return saveInstitutionalProfile({ ...input, verifiedByUserId: ctx.user.id });
+    }),
+  dignatarios: protectedProcedure.query(() => getJacDignatarios()),
+  assignRole: protectedProcedure
+    .input(
+      z.object({
+        userId: z.number().int().positive(),
+        jacRole: z.enum(["directiva", "coordinador_comite", "tesorero_fiscal", "secretario", "afiliado"]),
+        role: z.enum(["user", "admin"]),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await updateUserJacRole(input.userId, input.jacRole, input.role);
+      return { success: true };
     }),
 });
