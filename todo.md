@@ -45,3 +45,4 @@
 - [x] Validar visualmente la cabecera Bellavista 1991 en móvil y tableta, confirmando que el logotipo no se comprime ni desborda.
 - [x] Crear el commit de plataforma JAC Bellavista 1991 con el mensaje proporcionado y publicarlo en la rama principal remota.
 - [x] Actualizar y validar la vista previa a partir de la versión publicada en GitHub.
+- [ ] Forzar la sincronización de la vista previa con la rama principal publicada y verificar que muestra la actualización más reciente.
