@@ -43,5 +43,5 @@
 - [x] Integrar los cambios visuales y README de los commits 89f3a27 y 54cf2be sin aceptar eliminaciones de migraciones, scripts ni lógica institucional vigente.
 - [x] Corregir la compresión del texto del logotipo Bellavista 1991 en la cabecera de escritorio.
 - [x] Validar visualmente la cabecera Bellavista 1991 en móvil y tableta, confirmando que el logotipo no se comprime ni desborda.
-- [ ] Crear el commit de plataforma JAC Bellavista 1991 con el mensaje proporcionado y publicarlo en la rama principal remota.
-- [ ] Actualizar y validar la vista previa a partir de la versión publicada en GitHub.
+- [x] Crear el commit de plataforma JAC Bellavista 1991 con el mensaje proporcionado y publicarlo en la rama principal remota.
+- [x] Actualizar y validar la vista previa a partir de la versión publicada en GitHub.
