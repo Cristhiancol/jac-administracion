@@ -57,3 +57,7 @@
 - [x] Ejecutar una prueba objetiva de layout a 1280 px que confirme las cajas visibles de los diez módulos sin solapamiento con el logo.
 - [x] Corregir la prueba de afiliados para evitar duplicados persistentes y asegurar que la suite sea repetible después de la migración.
 - [x] Aplicar las migraciones de las tablas nuevas de afiliados, asambleas, campeonatos y reservas para restablecer las pruebas de integración.
+- [x] Sincronizar los últimos commits de la rama principal sin sobrescribir cambios locales.
+- [x] Compilar y reiniciar la vista previa de la versión sincronizada.
+- [x] Verificar animaciones deportivas, matriz del Plan de Trabajo 2026–2030, total de gastos $9.739.678, dignatarios institucionales y logo oficial Bellavista.
+- [x] Validar con prueba automatizada el contenido estratégico 2026–2030 de la matriz del Plan de Trabajo.
