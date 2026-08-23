@@ -2,6 +2,8 @@ import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from '@shared/const';
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import type { TrpcContext } from "./context";
+import type { JacRole } from "@shared/jac-domain";
+import { canAccessJacRole } from "@shared/jac-access";
 
 const t = initTRPC.context<TrpcContext>().create({
   transformer: superjson,
@@ -43,3 +45,23 @@ export const adminProcedure = t.procedure.use(
     });
   }),
 );
+
+export function jacRoleProcedure(allowedRoles: readonly JacRole[]) {
+  return protectedProcedure.use(
+    t.middleware(async opts => {
+      const { ctx, next } = opts;
+      const user = ctx.user;
+      if (!user) {
+        throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
+      }
+      if (!canAccessJacRole(user.role, user.jacRole, allowedRoles)) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "No tiene permisos para realizar esta operación en la JAC.",
+        });
+      }
+
+      return next({ ctx: { ...ctx, user } });
+    }),
+  );
+}

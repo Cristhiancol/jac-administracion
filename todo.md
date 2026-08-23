@@ -1,0 +1,31 @@
+# Project TODO
+
+- [x] Documentar la arquitectura efectiva del scaffold React 19, Express, tRPC y Drizzle, incluyendo la equivalencia funcional solicitada para una PWA full-stack.
+- [x] Crear el modelo de datos para perfiles institucionales, roles JAC, comisiones, planes de trabajo, actividades, obligaciones, periodos, movimientos financieros y noticias institucionales.
+- [x] Definir y aplicar RBAC para Presidente/Directiva, Coordinador de Comité, Tesorero/Fiscal, Secretario y Afiliado.
+- [x] Crear la ficha institucional editable con nombre de la JAC, NIT, dirección, enlace de verificación, estado de validación y ubicación en mapa.
+- [x] Impedir que la ficha institucional se presente como verificada sin evidencia registrada para nombre, NIT y dirección.
+- [ ] Integrar el componente de mapa existente para mostrar la dirección institucional validada.
+- [x] Implementar panel PWA responsivo con modo claro/oscuro, alto contraste, tipografía legible y controles de tamaño adecuado.
+- [x] Registrar manifiesto PWA y estrategia de caché segura para consultas de lectura críticas.
+- [x] Implementar el Plan de Trabajo Comunal del Coordinador de Comité con cronograma, metas, comisiones, responsables, porcentaje de avance, evidencias y estado.
+- [ ] Implementar vistas de seguimiento por comisión y responsable, con filtros por periodo y estado.
+- [ ] Implementar la matriz de obligaciones legales con tipo de obligación, entidad receptora, fundamento, fecha límite, responsable, evidencias y estado de cumplimiento.
+- [ ] Configurar calendario para rendición de cuentas, asambleas y reportes ante IDPAC o Alcaldía, dejando los criterios jurídicos trazables y revisables.
+- [ ] Implementar módulo financiero para ingresos, gastos, caja menor, servicios públicos, mantenimiento, aportes y adjuntos en almacenamiento seguro.
+- [ ] Calcular balance presupuestal en tiempo real por periodo, categoría y fuente de recursos.
+- [ ] Crear tablero financiero con indicadores y gráficos accesibles de ingresos, egresos, balance y ejecución presupuestal.
+- [x] Validar visualmente la fuente oficial de la Alcaldía Local de Usme mediante navegación web antes de habilitar la sincronización.
+- [x] Implementar conector de noticias institucionales que conserve URL de origen, fecha de consulta, fecha de publicación, título, resumen y estado de validación.
+- [ ] Diseñar una actualización periódica determinista para noticias institucionales conforme a las restricciones del entorno de ejecución.
+- [ ] Crear estados de carga, vacíos, errores y notificaciones animadas para los módulos implementados.
+- [x] Crear pruebas unitarias para cálculos de avance, balance, ejecución presupuestal y fechas de obligaciones.
+- [ ] Crear pruebas de integración para RBAC, persistencia de actividades, movimientos y control de la ficha institucional verificable.
+- [ ] Crear pruebas de interfaz para navegación del panel, accesibilidad básica, visualización de mapa y módulos del Coordinador de Comité.
+- [x] Ejecutar verificación de tipos, pruebas automatizadas y revisión de interfaz antes de cada entrega.
+- [x] Documentar archivos generados, decisiones técnicas, limitaciones pendientes y evidencia de validación de datos institucionales.
+- [x] Configurar la ficha inicial con el nombre jurídico aportado y conservar NIT y dirección como campos editables con estado pendiente de verificación.
+- [x] Centrar provisionalmente el mapa institucional en la localidad de Usme con marcador identificable y sin afirmar ubicación de sede no validada.
+- [x] Exponer controles de Super Admin para cambiar el estado de validación institucional y adjuntar evidencia de contraste.
+- [ ] Incluir en la vista del Coordinador la trazabilidad de gastos relacionados con metas y actividades.
+- [x] Cubrir validación de formularios y la lógica de reservas en la suite automatizada solicitada.
