@@ -58,6 +58,8 @@ export default function Assemblies() {
             </Button>
           </div>
         )}
+        <AbsencesAlertReportCard isAdmin={isAdmin} />
+
         <AssembliesList 
           isAdmin={isAdmin} 
           onTakeAttendance={(id) => {
@@ -67,6 +69,67 @@ export default function Assemblies() {
         />
       </div>
     </JacShell>
+  );
+}
+
+function AbsencesAlertReportCard({ isAdmin }: { isAdmin: boolean }) {
+  const { data: report = [], isLoading } = trpc.assemblies.absencesReport.useQuery();
+
+  if (isLoading || report.length === 0) return null;
+
+  return (
+    <Card className="border-rose-300 dark:border-rose-900/60 bg-rose-500/10 shadow-md rounded-2xl overflow-hidden mb-6">
+      <CardContent className="p-6 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-rose-200 dark:border-rose-900/40 pb-4">
+          <div className="flex items-center gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-500 text-white font-bold animate-pulse">
+              ⚠️
+            </span>
+            <div>
+              <h3 className="font-serif text-lg font-black text-rose-950 dark:text-rose-200">
+                Alerta de Inasistencia Crítica (3+ Asambleas Sin Justificar)
+              </h3>
+              <p className="text-xs text-rose-800 dark:text-rose-300 mt-0.5">
+                Estatutos Comunitarios: Afiliados con 3 o más inasistencias requieren verificación telefónica o inicio de proceso de exclusión.
+              </p>
+            </div>
+          </div>
+          <span className="text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full bg-rose-600 text-white self-start sm:self-auto">
+            {report.length} Afiliado{report.length !== 1 ? "s" : ""} en Riesgo
+          </span>
+        </div>
+
+        <div className="divide-y divide-rose-200 dark:divide-rose-900/40">
+          {report.map((aff) => (
+            <div key={aff.affiliateId} className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+              <div className="space-y-1">
+                <p className="font-bold text-rose-950 dark:text-rose-100 text-sm">
+                  {aff.fullName} <span className="font-mono text-xs text-rose-700 dark:text-rose-300 font-medium">(C.C. {aff.cedula})</span>
+                </p>
+                <p className="text-rose-800 dark:text-rose-300">
+                  Comité: <span className="font-semibold">{aff.commissionName || "Sin comité"}</span> · Tel: <span className="font-semibold">{aff.phone || "No registrado"}</span>
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <span className="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-black text-xs">
+                  {aff.absences} Inasistencias
+                </span>
+                {isAdmin && aff.phone && (
+                  <a
+                    href={`tel:${aff.phone}`}
+                    onClick={() => toast.info(`Llamando a ${aff.fullName} (${aff.phone})`)}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-white dark:bg-rose-950 text-rose-700 dark:text-rose-200 border border-rose-300 font-bold hover:bg-rose-100 transition"
+                  >
+                    📞 Llamar / Validar
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

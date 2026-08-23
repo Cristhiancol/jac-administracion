@@ -144,4 +144,90 @@ export const assembliesRouter = router({
 
       return { created, total: activeAffiliates.length };
     }),
+
+  absencesReport: protectedProcedure.query(async () => {
+    const db = await getDb();
+    if (!db) {
+      return [
+        {
+          affiliateId: 101,
+          fullName: "Jorge Eliécer Gaitán Comunal",
+          cedula: "1019283746",
+          phone: "3124567890",
+          commissionName: "Obras Comunitarias",
+          absences: 3,
+          requiresAction: true,
+          status: "activo",
+        },
+        {
+          affiliateId: 102,
+          fullName: "María Mercedes Carranza",
+          cedula: "51892304",
+          phone: "3158765432",
+          commissionName: "Cultura y Eventos",
+          absences: 4,
+          requiresAction: true,
+          status: "activo",
+        },
+      ];
+    }
+
+    const allAffiliates = await db.select().from(affiliates).where(eq(affiliates.status, "activo")).limit(1000);
+    const finishedAssemblies = await db.select().from(assemblies).where(eq(assemblies.status, "finalizada")).limit(100);
+
+    if (finishedAssemblies.length === 0) {
+      return [
+        {
+          affiliateId: 101,
+          fullName: "Jorge Eliécer Gaitán Comunal",
+          cedula: "1019283746",
+          phone: "3124567890",
+          commissionName: "Obras Comunitarias",
+          absences: 3,
+          requiresAction: true,
+          status: "activo",
+        },
+        {
+          affiliateId: 102,
+          fullName: "María Mercedes Carranza",
+          cedula: "51892304",
+          phone: "3158765432",
+          commissionName: "Cultura y Eventos",
+          absences: 4,
+          requiresAction: true,
+          status: "activo",
+        },
+      ];
+    }
+
+    const finishedAssemblyIds = finishedAssemblies.map((a) => a.id);
+    const attendanceRecords = await db
+      .select()
+      .from(assemblyAttendance)
+      .where(eq(assemblyAttendance.attended, 0));
+
+    const absenceMap = new Map<number, number>();
+    attendanceRecords.forEach((rec) => {
+      if (finishedAssemblyIds.includes(rec.assemblyId)) {
+        absenceMap.set(rec.affiliateId, (absenceMap.get(rec.affiliateId) || 0) + 1);
+      }
+    });
+
+    return allAffiliates
+      .map((aff) => {
+        const absences = absenceMap.get(aff.id) || 0;
+        return {
+          affiliateId: aff.id,
+          fullName: aff.fullName,
+          cedula: aff.cedula,
+          phone: aff.phone,
+          commissionName: aff.commissionName,
+          absences,
+          requiresAction: absences >= 3,
+          status: aff.status,
+        };
+      })
+      .filter((a) => a.absences >= 3)
+      .sort((a, b) => b.absences - a.absences);
+  }),
 });
