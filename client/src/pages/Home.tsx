@@ -21,6 +21,7 @@ export default function Home() {
   const activities = data?.activities ?? [];
   const completed = activities.filter(item => item.status === "completada").length;
   const pendingObligations = (data?.obligations ?? []).filter(item => item.status !== "cumplida").length;
+  const profileVerified = data?.profile?.verificationStatus === "verificado";
 
   return (
     <JacShell eyebrow="Panel principal" title="Gestión comunal con trazabilidad" description="Un espacio de coordinación para convertir las metas de la JAC en actividades, obligaciones y movimientos verificables.">
@@ -30,7 +31,7 @@ export default function Home() {
           <div className="max-w-2xl">
             <div className="mb-5 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-amber-200"><Landmark className="h-4 w-4" /> Localidad de Usme</div>
             <h2 className="font-serif text-3xl font-bold leading-tight sm:text-4xl">Junta de Acción Comunal Barrio Usme Centro</h2>
-            <p className="mt-4 max-w-xl text-sm leading-6 text-emerald-50/75">La ficha institucional se encuentra disponible para revisión de la Directiva. NIT y dirección oficial aún requieren soporte verificable antes de marcarse como confirmados.</p>
+            <p className="mt-4 max-w-xl text-sm leading-6 text-emerald-50/75">{profileVerified ? "La ficha institucional cuenta con NIT, personería jurídica, código comunal y ubicación confirmados por la Directiva." : "La ficha institucional se encuentra disponible para revisión de la Directiva y conserva los campos pendientes de evidencia."}</p>
           </div>
           <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-emerald-100/70">Estado institucional</p>

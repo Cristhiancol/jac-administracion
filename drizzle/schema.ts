@@ -50,11 +50,14 @@ export const institutionalProfiles = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     legalName: varchar("legalName", { length: 255 }).notNull(),
     nit: varchar("nit", { length: 20 }),
+    legalRecognition: varchar("legalRecognition", { length: 255 }),
+    communityCode: varchar("communityCode", { length: 80 }),
     officialAddress: text("officialAddress"),
     neighborhood: varchar("neighborhood", { length: 160 }),
     locality: varchar("locality", { length: 120 }).notNull().default("Usme"),
     latitude: decimal("latitude", { precision: 10, scale: 7 }),
     longitude: decimal("longitude", { precision: 10, scale: 7 }),
+    mapEmbedUrl: varchar("mapEmbedUrl", { length: 2000 }),
     verificationStatus: mysqlEnum("verificationStatus", ["pendiente", "verificado", "observado"])
       .notNull()
       .default("pendiente"),

@@ -101,7 +101,7 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
       <footer className="border-t border-emerald-950/5 bg-white/50">
         <div className="container flex flex-col justify-between gap-2 py-5 text-xs text-emerald-950/55 sm:flex-row">
           <span>Junta de Acción Comunal Barrio Usme Centro / Localidad de Usme</span>
-          <span>Ficha institucional: pendiente de validación por Directiva</span>
+          <span>Ficha institucional y trazabilidad comunitaria</span>
         </div>
       </footer>
     </div>

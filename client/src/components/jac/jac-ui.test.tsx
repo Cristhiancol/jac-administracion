@@ -17,10 +17,10 @@ describe("componentes de interfaz JAC", () => {
     expect(screen.getByText("verificado").className).toContain("bg-emerald-100");
   });
 
-  it("expone el mapa de Usme con título accesible y aviso de ubicación provisional", () => {
+  it("expone el mapa de sede confirmada con título accesible y coordenadas visibles", () => {
     render(<InstitutionalMap address={null} />);
-    expect(screen.getByTitle(/Mapa de ubicación provisional de Usme/i)).toHaveAttribute("src", expect.stringContaining("openstreetmap.org"));
-    expect(screen.getByText(/Marcador provisional de Usme/i)).toBeVisible();
+    expect(screen.getByTitle(/Mapa de sede institucional confirmada/i)).toBeVisible();
+    expect(screen.getByText(/Sede confirmada por la Directiva/i)).toBeVisible();
   });
 
   it("expone la navegación principal del panel para los módulos comunitarios", () => {

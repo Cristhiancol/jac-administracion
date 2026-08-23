@@ -108,11 +108,14 @@ export async function getInstitutionalProfile() {
 export async function saveInstitutionalProfile(input: {
   legalName: string;
   nit?: string | null;
+  legalRecognition?: string | null;
+  communityCode?: string | null;
   officialAddress?: string | null;
   neighborhood?: string | null;
   locality: string;
   latitude?: string | null;
   longitude?: string | null;
+  mapEmbedUrl?: string | null;
   verificationStatus: "pendiente" | "verificado" | "observado";
   verificationSourceUrl?: string | null;
   verificationNotes?: string | null;
@@ -123,11 +126,14 @@ export async function saveInstitutionalProfile(input: {
   const values = {
     legalName: input.legalName,
     nit: input.nit || null,
+    legalRecognition: input.legalRecognition || null,
+    communityCode: input.communityCode || null,
     officialAddress: input.officialAddress || null,
     neighborhood: input.neighborhood || null,
     locality: input.locality,
     latitude: input.latitude || null,
     longitude: input.longitude || null,
+    mapEmbedUrl: input.mapEmbedUrl || null,
     verificationStatus: input.verificationStatus,
     verificationSourceUrl: input.verificationSourceUrl || null,
     verificationNotes: input.verificationNotes || null,
