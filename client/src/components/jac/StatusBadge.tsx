@@ -1,5 +1,6 @@
 import { CheckCircle2, Clock3, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 type Status = "pendiente" | "verificado" | "observado" | "cumplida" | "en_proceso" | "vencida";
 

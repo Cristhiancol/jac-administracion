@@ -1,5 +1,6 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import { JacShell } from "@/components/jac/JacShell";
+import { JacLoadingState } from "@/components/jac/JacLoadingState";
 import { StatusBadge } from "@/components/jac/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +23,8 @@ export default function News() {
     onError: error => toast.error(error.message),
   });
   const items = snapshot.data?.news ?? [];
+  if (snapshot.isLoading || sources.isLoading) return <JacShell eyebrow="Información institucional" title="Noticias y comunicados de Usme" description="Cargando fuente y comunicados institucionales."><JacLoadingState label="Cargando noticias institucionales" /></JacShell>;
+  if (snapshot.error || sources.error) return <JacShell eyebrow="Información institucional" title="Noticias y comunicados de Usme" description="No fue posible consultar la fuente institucional."><div role="alert" className="rounded-2xl border border-rose-200 bg-rose-50 p-6 text-sm text-rose-950">No se pudo cargar la cartelera institucional. Intenta de nuevo.</div></JacShell>;
 
   return <JacShell eyebrow="Información institucional" title="Noticias y comunicados de Usme" description="Cada contenido sincronizado conserva su enlace de origen y estado de validación para facilitar el contraste con la fuente pública.">
     <section className="rounded-3xl border border-emerald-200 bg-emerald-50 p-6 sm:p-7"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center"><div className="flex gap-4"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white text-emerald-800"><ShieldCheck className="h-5 w-5" /></span><div><p className="font-serif text-xl font-bold text-emerald-950">Fuente institucional validada</p><p className="mt-1 text-sm leading-6 text-emerald-950/65">Portal oficial de la Alcaldía Local de Usme, con sección pública de noticias y enlaces de origen.</p></div></div><a href={sourceUrl} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-800">Visitar fuente <ExternalLink className="h-4 w-4" /></a></div></section>

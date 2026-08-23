@@ -38,7 +38,7 @@ describe("validación de formularios y permisos JAC", () => {
   });
 
   it("valida montos financieros y limita el rol de tesorería", () => {
-    expect(financialMovementSchema.safeParse({ movementType: "egreso", category: "Servicios", description: "Pago de energía", amount: "125000", occurredAt: "2026-08-01T00:00:00Z" }).success).toBe(true);
+    expect(financialMovementSchema.safeParse({ movementType: "egreso", category: "Servicios", source: "Aportes comunitarios", description: "Pago de energía", amount: "125000", occurredAt: "2026-08-01T00:00:00Z" }).success).toBe(true);
     expect(canAccessJacRole("user", "tesorero_fiscal", ["tesorero_fiscal", "directiva"])).toBe(true);
     expect(canAccessJacRole("user", "afiliado", ["tesorero_fiscal"])).toBe(false);
     expect(canAccessJacRole("admin", "afiliado", ["tesorero_fiscal"])).toBe(true);

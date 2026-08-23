@@ -154,6 +154,7 @@ export const financialMovements = mysqlTable(
     id: int("id").autoincrement().primaryKey(),
     movementType: mysqlEnum("movementType", ["ingreso", "egreso"]).notNull(),
     category: varchar("category", { length: 120 }).notNull(),
+    source: varchar("source", { length: 120 }).notNull().default("Sin fuente"),
     description: text("description").notNull(),
     amount: decimal("amount", { precision: 14, scale: 2 }).notNull(),
     occurredAt: timestamp("occurredAt").notNull(),
@@ -164,6 +165,20 @@ export const financialMovements = mysqlTable(
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   },
   table => [index("financial_movement_period_idx").on(table.occurredAt, table.movementType)],
+);
+
+export const financialBudgets = mysqlTable(
+  "financialBudgets",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    periodLabel: varchar("periodLabel", { length: 80 }).notNull(),
+    source: varchar("source", { length: 120 }).notNull(),
+    approvedAmount: decimal("approvedAmount", { precision: 14, scale: 2 }).notNull(),
+    createdByUserId: int("createdByUserId").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [uniqueIndex("financial_budget_period_source_unique").on(table.periodLabel, table.source)],
 );
 
 export const facilityReservations = mysqlTable(
@@ -233,6 +248,7 @@ export type WorkPlan = typeof workPlans.$inferSelect;
 export type WorkPlanActivity = typeof workPlanActivities.$inferSelect;
 export type LegalObligation = typeof legalObligations.$inferSelect;
 export type FinancialMovement = typeof financialMovements.$inferSelect;
+export type FinancialBudget = typeof financialBudgets.$inferSelect;
 export type FacilityReservation = typeof facilityReservations.$inferSelect;
 export type InstitutionalNewsSource = typeof institutionalNewsSources.$inferSelect;
 export type InstitutionalNewsItem = typeof institutionalNewsItems.$inferSelect;

@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/mysql2";
 import {
   commissions,
   facilityReservations,
+  financialBudgets,
   financialMovements,
   institutionalNewsItems,
   institutionalNewsSources,
@@ -170,6 +171,16 @@ export async function getCommunitySnapshot() {
   return { profile, plans, activities, obligations, movements, reservations, news };
 }
 
+export async function getFinanceSnapshot() {
+  const db = await getDb();
+  if (!db) return { movements: [], budgets: [] };
+  const [movements, budgets] = await Promise.all([
+    db.select().from(financialMovements).orderBy(desc(financialMovements.occurredAt)).limit(500),
+    db.select().from(financialBudgets).orderBy(desc(financialBudgets.updatedAt)).limit(100),
+  ]);
+  return { movements, budgets };
+}
+
 export async function getCommissions() {
   const db = await getDb();
   if (!db) return [];
@@ -254,6 +265,7 @@ export async function createLegalObligation(input: {
   recurrence: "unica" | "anual" | "semestral" | "trimestral";
   dueAt: Date;
   responsibleUserId?: number | null;
+  supportUrl?: string | null;
   notes?: string | null;
 }) {
   const db = ensureDb(await getDb());
@@ -261,14 +273,28 @@ export async function createLegalObligation(input: {
     ...input,
     receivingEntity: input.receivingEntity || null,
     responsibleUserId: input.responsibleUserId || null,
+    supportUrl: input.supportUrl || null,
     notes: input.notes || null,
     status: "pendiente",
   });
 }
 
+export async function updateLegalObligation(input: {
+  id: number;
+  status: "pendiente" | "en_proceso" | "cumplida" | "vencida";
+  supportUrl?: string | null;
+}) {
+  const db = ensureDb(await getDb());
+  await db
+    .update(legalObligations)
+    .set({ status: input.status, supportUrl: input.supportUrl || null })
+    .where(eq(legalObligations.id, input.id));
+}
+
 export async function recordFinancialMovement(input: {
   movementType: "ingreso" | "egreso";
   category: string;
+  source: string;
   description: string;
   amount: string;
   occurredAt: Date;
@@ -281,6 +307,18 @@ export async function recordFinancialMovement(input: {
     ...input,
     activityId: input.activityId || null,
     supportUrl: input.supportUrl || null,
+  });
+}
+
+export async function upsertFinancialBudget(input: {
+  periodLabel: string;
+  source: string;
+  approvedAmount: string;
+  createdByUserId: number;
+}) {
+  const db = ensureDb(await getDb());
+  await db.insert(financialBudgets).values(input).onDuplicateKeyUpdate({
+    set: { approvedAmount: input.approvedAmount, createdByUserId: input.createdByUserId, updatedAt: new Date() },
   });
 }
 

@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { financeRouter } from "./routers/finance";
+import { filesRouter } from "./routers/files";
 import { institutionalRouter } from "./routers/institutional";
 import { newsRouter } from "./routers/news";
 import { obligationsRouter } from "./routers/obligations";
@@ -26,6 +27,7 @@ export const appRouter = router({
   workPlan: workPlanRouter,
   obligations: obligationsRouter,
   finance: financeRouter,
+  files: filesRouter,
   reservations: reservationsRouter,
   news: newsRouter,
 });

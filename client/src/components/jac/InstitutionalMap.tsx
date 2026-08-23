@@ -1,5 +1,7 @@
 import { MapPin } from "lucide-react";
 
+import React from "react";
+
 const USME_CENTER = "4.4772,-74.1273";
 const OSM_EMBED_URL = "https://www.openstreetmap.org/export/embed.html?bbox=-74.155%2C4.455%2C-74.099%2C4.499&layer=mapnik&marker=4.4772%2C-74.1273";
 

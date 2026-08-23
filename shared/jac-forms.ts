@@ -42,6 +42,7 @@ export const reservationSchema = z
 export const financialMovementSchema = z.object({
   movementType: z.enum(["ingreso", "egreso"]),
   category: z.string().trim().min(3).max(120),
+  source: z.string().trim().min(2).max(120),
   description: z.string().trim().min(5).max(2000),
   amount: z.string().regex(/^\d+(\.\d{1,2})?$/, "Valor monetario inválido"),
   occurredAt: z.coerce.date(),

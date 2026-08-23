@@ -1,0 +1,34 @@
+// @vitest-environment jsdom
+import "@testing-library/jest-dom/vitest";
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import { InstitutionalMap } from "./InstitutionalMap";
+import { JacShell } from "./JacShell";
+import { StatusBadge } from "./StatusBadge";
+
+vi.mock("@/_core/hooks/useAuth", () => ({ useAuth: () => ({ isAuthenticated: true, user: { name: "Cristhian" }, loading: false, logout: vi.fn() }) }));
+vi.mock("@/contexts/ThemeContext", () => ({ useTheme: () => ({ theme: "light", toggleTheme: vi.fn() }) }));
+
+describe("componentes de interfaz JAC", () => {
+  it("presenta un estado verificable y legible", () => {
+    render(<StatusBadge status="verificado" />);
+    expect(screen.getByText("verificado")).toBeVisible();
+    expect(screen.getByText("verificado").className).toContain("bg-emerald-100");
+  });
+
+  it("expone el mapa de Usme con título accesible y aviso de ubicación provisional", () => {
+    render(<InstitutionalMap address={null} />);
+    expect(screen.getByTitle(/Mapa de ubicación provisional de Usme/i)).toHaveAttribute("src", expect.stringContaining("openstreetmap.org"));
+    expect(screen.getByText(/Marcador provisional de Usme/i)).toBeVisible();
+  });
+
+  it("expone la navegación principal del panel para los módulos comunitarios", () => {
+    render(<JacShell eyebrow="Prueba" title="Panel" description="Descripción de prueba"><p>Contenido</p></JacShell>);
+    const nav = screen.getByLabelText("Navegación principal");
+    expect(nav).toHaveTextContent("Plan comunal");
+    expect(nav).toHaveTextContent("Obligaciones");
+    expect(nav).toHaveTextContent("Finanzas");
+    expect(nav).toHaveTextContent("Noticias");
+  });
+});
