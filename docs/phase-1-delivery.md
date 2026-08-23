@@ -6,6 +6,8 @@
 
 Se integraron el emblema vectorial, favicon, paleta azul institucional–verde Usme, hero visual, título de aplicación y README publicados en los commits remotos **89f3a27** y **54cf2be**. La actualización es estrictamente de identidad visual y documentación: se preservaron las migraciones, la tarea diaria de noticias, los procedimientos de seguridad y los datos jurídicos ya verificados en la ficha institucional.
 
+La cabecera fue revisada visualmente en **375×812**, **768×1024** y **1280×720**. En las tres vistas el emblema, el nombre “JAC Bellavista (1991)” y el lema permanecieron visibles, sin desbordamiento horizontal; en móvil y tableta se muestra la navegación compacta, mientras que en escritorio se conserva la navegación completa. La revisión independiente de móvil confirmó una composición clara y utilizable para el panel comunitario.
+
 La ficha institucional quedó en estado **verificado** con NIT **830.061.828-3**, Personería Jurídica **N.º 0837 del 15 de marzo de 1991**, Código Comunal **5084** y sede registrada como **Carrera 54D # 167B-11, Bogotá, Colombia**. La ubicación oficial usa las coordenadas **4.5047526, -74.1068319** y el enlace de Google Maps confirmado por la Directiva. La ubicación se fundamenta en esa confirmación directa; no se presenta como resultado de la geocodificación pública inicial, que fue inconsistente con la localidad declarada.
 
 La sincronización de comunicados de la Alcaldía Local de Usme conserva el control manual para la Directiva y cuenta además con una tarea diaria activa a las **06:00 COT** (`0 0 11 * * *` en UTC). El identificador de la tarea está asociado a la fuente de noticias para que el callback publicado se resuelva de forma segura e idempotente.

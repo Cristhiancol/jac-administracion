@@ -152,7 +152,7 @@ export function JacLogo({
 
   // Full Variant with Emblem & Typography
   return (
-    <div className={`inline-flex items-center gap-3 ${animationClasses} ${className}`}>
+    <div className={`inline-flex shrink-0 items-center gap-3 ${animationClasses} ${className}`}>
       <svg
         width={dimension}
         height={dimension}
@@ -222,11 +222,11 @@ export function JacLogo({
       </svg>
 
       {showText && (
-        <div className="flex flex-col">
+        <div className="flex min-w-[150px] flex-col whitespace-nowrap">
           <span className="font-serif font-extrabold tracking-tight text-emerald-950 dark:text-emerald-50 leading-tight text-base sm:text-lg">
             JAC Bellavista <span className="text-amber-500 font-sans text-xs sm:text-sm font-semibold">(1991)</span>
           </span>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
+          <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700 dark:text-emerald-400">
             Todos Somos Comunidad
           </span>
         </div>

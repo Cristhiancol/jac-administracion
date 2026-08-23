@@ -27,7 +27,7 @@ export function JacShell({ children, eyebrow, title, description }: { children: 
     <div className="min-h-screen bg-background text-foreground selection:bg-[#f5c451]/40">
       <header className="sticky top-0 z-50 border-b border-emerald-950/5 bg-background/90 backdrop-blur-xl">
         <div className="container flex h-18 items-center justify-between gap-4 py-3">
-          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="Inicio JAC Bellavista 1991">
+          <Link href="/" className="group flex shrink-0 items-center gap-3" aria-label="Inicio JAC Bellavista 1991">
             <JacLogo className="transition-transform duration-200 group-hover:-rotate-2" />
           </Link>
 

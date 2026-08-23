@@ -41,3 +41,5 @@
 - [x] Publicar el commit final pendiente y documentar el hash remoto confirmado de la sincronización GitHub.
 - [x] Sincronizar el commit 54cf2be de la rama principal y validar la identidad visual JAC Bellavista 1991 y el README actualizado.
 - [x] Integrar los cambios visuales y README de los commits 89f3a27 y 54cf2be sin aceptar eliminaciones de migraciones, scripts ni lógica institucional vigente.
+- [x] Corregir la compresión del texto del logotipo Bellavista 1991 en la cabecera de escritorio.
+- [x] Validar visualmente la cabecera Bellavista 1991 en móvil y tableta, confirmando que el logotipo no se comprime ni desborda.
