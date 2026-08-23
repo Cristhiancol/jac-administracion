@@ -65,6 +65,10 @@ El portal de la **Alcaldía Local de Usme** presenta contenido público de notic
 | Media | Añadir el calendario visual de obligaciones, el tablero analítico por período/categoría/fuente y la interfaz completa de reservas. |
 | Completado | Publicación confirmada y tarea diaria activada sobre la ruta `/api/scheduled/synchronize-official-news`. |
 
+## Sincronización con GitHub
+
+La rama `main` se comparó con `user_github/main` después de actualizar las referencias remotas; la base común y ambos hashes coincidían antes de la publicación final. El commit de sincronización publicado y verificado en GitHub es **`4409c85ca8b2de48208e5ed500babb111cf9b5b8`**. La comprobación posterior confirmó que el hash local y el remoto coincidían y que no quedaban cambios locales.
+
 ## Referencias
 
 [1]: https://usme.gobiernobogota.gov.co/ "Alcaldía Local de Usme"
