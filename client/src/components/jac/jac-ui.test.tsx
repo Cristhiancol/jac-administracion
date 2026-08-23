@@ -25,10 +25,26 @@ describe("componentes de interfaz JAC", () => {
 
   it("expone la navegación principal del panel para los módulos comunitarios", () => {
     render(<JacShell eyebrow="Prueba" title="Panel" description="Descripción de prueba"><p>Contenido</p></JacShell>);
+    expect(
+      screen.getAllByRole("img", {
+        name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i,
+      })[0],
+    ).toBeVisible();
     const nav = screen.getByLabelText("Navegación principal");
-    expect(nav).toHaveTextContent("Plan comunal");
-    expect(nav).toHaveTextContent("Obligaciones");
-    expect(nav).toHaveTextContent("Finanzas");
-    expect(nav).toHaveTextContent("Noticias");
+    const modules = [
+      "Inicio",
+      "Afiliados",
+      "Asambleas",
+      "Campeonatos",
+      "Plan comunal",
+      "Obligaciones",
+      "Finanzas",
+      "Reservas",
+      "Identidad",
+      "Noticias",
+    ];
+
+    modules.forEach((label) => expect(nav).toHaveTextContent(label));
+    expect(nav.querySelectorAll("a")).toHaveLength(10);
   });
 });

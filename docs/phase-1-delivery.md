@@ -23,7 +23,10 @@ La ficha institucional se registró con el nombre jurídico suministrado: **Junt
 | Plan de Trabajo Comunal | Base funcional implementada | Planes, comisiones, responsables seleccionables, actividades, metas, cronograma, estado, porcentaje, URL de evidencia y filtros por periodo, comisión y estado. |
 | Obligaciones legales | Base funcional implementada | Matriz con fundamento, entidad, periodicidad, vencimiento, notas y estado. Incluye referencias de Ley 2166. |
 | Finanzas | Base funcional implementada | Registro de ingresos y egresos, caja por categoría, soporte URL y balance actualizado. |
-| Reservas | Lógica y modelo implementados | Validación de horario, solapamiento y esquema de solicitudes; interfaz de reservas queda programada en el backlog. |
+| Afiliados y credenciales | Implementado | Libro de afiliados con carga masiva CSV/Excel, códigos QR y estado de afiliación. |
+| Asambleas QR | Implementado | Programación de asambleas y control de asistencia con QR, cédula y lista. |
+| Campeonatos y campañas | Implementado | Gestión de campeonatos, copas, torneos y campañas comunitarias. |
+| Reservas | Implementado | Calendario de solicitudes, aprobación y validación de horario para el salón comunal. |
 | Noticias institucionales | Implementado y programado | Fuente oficial registrada, extractor de títulos, fechas de publicación y consulta, URL y resumen; sincronización manual protegida y tarea diaria activa a las 06:00 COT. |
 | PWA | Implementado | Manifiesto, registro de service worker de producción y estrategia de caché que no interfiere con desarrollo. |
 | Calidad | Validado | Pruebas Vitest, verificación TypeScript, compilación de producción y revisión visual de rutas principales. |
@@ -36,10 +39,10 @@ El portal de la **Alcaldía Local de Usme** presenta contenido público de notic
 
 | Área | Archivos |
 | --- | --- |
-| Modelo y persistencia | `drizzle/schema.ts`, `drizzle/0001_equal_mole_man.sql`, `drizzle/0002_damp_jean_grey.sql`, `drizzle/0003_steady_scream.sql`, `server/db.ts` |
+| Modelo y persistencia | `drizzle/schema.ts`, migraciones `0001` a `0004_foamy_toad_men.sql`, `server/db.ts` |
 | Dominio y permisos | `shared/jac-domain.ts`, `shared/jac-access.ts`, `shared/jac-forms.ts`, `server/_core/trpc.ts` |
-| Lógica de servidor | `server/routers/{institutional,work-plan,finance,obligations,reservations,news}.ts`, `server/integrations/usme-news.ts`, `server/handlers/news-sync.ts` |
-| Interfaz | `client/src/pages/{Home,WorkPlan,Obligations,Finance,InstitutionalProfile,News}.tsx`, `client/src/components/jac/*` |
+| Lógica de servidor | `server/routers/{institutional,work-plan,finance,obligations,reservations,news,affiliates,assemblies,championships}.ts`, `server/integrations/usme-news.ts`, `server/handlers/news-sync.ts` |
+| Interfaz | `client/src/pages/{Home,Affiliates,Assemblies,Championships,WorkPlan,Obligations,Finance,Reservations,InstitutionalProfile,News}.tsx`, `client/src/components/jac/*` |
 | PWA | `client/public/manifest.webmanifest`, `client/public/sw.js`, `client/src/main.tsx` |
 | Pruebas | `server/domain/*.test.ts`, `server/jac-forms.test.ts`, `server/routers.rbac.test.ts`, `server/routers.persistence.test.ts`, `server/institutional.integration.test.ts`, `server/integrations/usme-news.test.ts`, `client/src/components/jac/jac-ui.test.tsx` |
 | Documentación | `docs/architecture.md`, `docs/configuration.md`, `todo.md`, este documento |
@@ -48,7 +51,7 @@ El portal de la **Alcaldía Local de Usme** presenta contenido público de notic
 
 | Validación | Resultado |
 | --- | --- |
-| Suite Vitest | **23 pruebas aprobadas** en 10 archivos. |
+| Suite Vitest | **35 pruebas aprobadas** en 13 archivos. |
 | Cobertura funcional validada | Cálculo financiero, NIT, vencimiento de obligaciones, disponibilidad de reservas, formularios, evidencia institucional, RBAC y extracción de noticias. |
 | Verificación de tipos | `pnpm check` aprobado. |
 | Compilación de producción | `pnpm build` aprobado. |
@@ -62,8 +65,20 @@ El portal de la **Alcaldía Local de Usme** presenta contenido público de notic
 | Completado | NIT, dirección, coordenadas, enlace de ubicación, personería jurídica y código comunal registrados por confirmación de la Directiva. |
 | Alta | Registrar el trabajo real de comisiones, actividades, obligaciones y movimientos financieros desde los perfiles asignados. |
 | Media | Conectar carga de archivos a almacenamiento seguro para comprobantes y evidencias. |
-| Media | Añadir el calendario visual de obligaciones, el tablero analítico por período/categoría/fuente y la interfaz completa de reservas. |
+| Media | Ampliar el calendario visual de obligaciones y el tablero analítico por período/categoría/fuente. |
 | Completado | Publicación confirmada y tarea diaria activada sobre la ruta `/api/scheduled/synchronize-official-news`. |
+
+## Actualización de módulos Bellavista 1991
+
+La navegación de escritorio fue verificada con los diez módulos solicitados: Inicio, Afiliados, Asambleas, Campeonatos, Plan comunal, Obligaciones, Finanzas, Reservas, Identidad y Noticias. El emblema SVG oficial se dejó en una variante compacta para no invadir estos accesos.
+
+> **Causa raíz y corrección.** La suite falló inicialmente porque el esquema remoto declaraba las tablas de afiliados, asambleas, asistencia, campeonatos y campañas, pero esas tablas todavía no estaban creadas en la base de datos. Se generó y aplicó la migración `0004_foamy_toad_men.sql`. Después se corrigió una prueba de afiliados que usaba una cédula fija y provocaba duplicados entre ejecuciones. La validación final aprobó **35 pruebas en 13 archivos** y la compilación de producción.
+
+El Reporte Consolidado de Finanzas se validó tanto en interfaz como en prueba JSDOM: muestra los gastos 2025 y 2026 y el total acumulado exacto de **$9.739.678**.
+
+La validación reproducible `scripts/validate-header-layout.mjs`, ejecutada en un viewport de **1280×720**, confirmó diez módulos visibles, cajas sin solapamiento ni desborde y la presencia visible del emblema SVG oficial. La captura final de escritorio coincidió con dicho resultado.
+
+La comprobación independiente en navegador confirmó los diez enlaces de navegación de cabecera —desde Inicio hasta Noticias— y mostró el emblema y la identidad Bellavista sin invadir la barra. Esta verificación se realizó sobre la vista previa sincronizada antes de publicación.
 
 ## Referencias
 

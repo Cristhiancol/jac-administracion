@@ -36,3 +36,24 @@
 - [x] Resolver la discrepancia entre la dirección confirmada (Carrera 54D # 167B-11) y la ubicación de la JAC en Usme antes de fijar coordenadas definitivas del mapa.
 - [x] Sustituir el mapa provisional por el embed oficial confirmado con coordenadas 4.504752602911481, -74.1068319118239 y enlace de Google Maps proporcionado por la Directiva.
 - [x] Eliminar los mensajes residuales de validación pendiente del inicio y pie de página cuando la ficha institucional esté verificada.
+- [x] Verificar el remoto GitHub conectado y sincronizar el checkpoint final de la PWA JAC sin sobrescribir cambios remotos.
+- [x] Comparar la rama local con `user_github/main` después de un fetch para impedir sobrescritura de cambios remotos.
+- [x] Publicar el commit final pendiente y documentar el hash remoto confirmado de la sincronización GitHub.
+- [x] Sincronizar el commit 54cf2be de la rama principal y validar la identidad visual JAC Bellavista 1991 y el README actualizado.
+- [x] Integrar los cambios visuales y README de los commits 89f3a27 y 54cf2be sin aceptar eliminaciones de migraciones, scripts ni lógica institucional vigente.
+- [x] Corregir la compresión del texto del logotipo Bellavista 1991 en la cabecera de escritorio.
+- [x] Validar visualmente la cabecera Bellavista 1991 en móvil y tableta, confirmando que el logotipo no se comprime ni desborda.
+- [x] Crear el commit de plataforma JAC Bellavista 1991 con el mensaje proporcionado y publicarlo en la rama principal remota.
+- [x] Actualizar y validar la vista previa a partir de la versión publicada en GitHub.
+- [x] Forzar la sincronización de la vista previa con la rama principal publicada y verificar que muestra la actualización más reciente.
+- [x] Comparar HEAD con `user_github/main`, reiniciar la vista previa y documentar el hash cargado antes de cerrar la incidencia.
+- [x] Sincronizar la última rama principal publicada desde GitHub sin sobrescribir cambios locales.
+- [x] Actualizar dependencias, compilar y reiniciar la vista previa de la versión sincronizada.
+- [x] Verificar logo Bellavista, navegación de 10 módulos y Reporte Consolidado de Gastos 2025–2026 de $9.739.678 en Finanzas.
+- [x] Corregir el desbordamiento del logotipo Bellavista remoto sobre los primeros accesos de la navegación de escritorio y validar los diez módulos visibles.
+- [x] Ampliar las pruebas de interfaz y documentar evidencia verificable de la navegación completa y del total consolidado visible en Finanzas.
+- [x] Añadir evidencia automatizada del emblema oficial Bellavista en la cabecera y una revisión visual independiente de escritorio sin solapamientos.
+- [x] Documentar una revisión visual independiente final a 1280 px que confirme que el emblema no invade la barra y los diez módulos son visibles simultáneamente.
+- [x] Ejecutar una prueba objetiva de layout a 1280 px que confirme las cajas visibles de los diez módulos sin solapamiento con el logo.
+- [x] Corregir la prueba de afiliados para evitar duplicados persistentes y asegurar que la suite sea repetible después de la migración.
+- [x] Aplicar las migraciones de las tablas nuevas de afiliados, asambleas, campeonatos y reservas para restablecer las pruebas de integración.

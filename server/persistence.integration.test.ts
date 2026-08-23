@@ -63,10 +63,11 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
 
   it("permite registrar un nuevo afiliado y guardarlo en el libro", async () => {
     const caller = createCaller();
+    const runId = `${Date.now()}${Math.floor(Math.random() * 10000)}`;
     const result = await caller.affiliates.create({
-      code: "AF-999",
+      code: `AF-${runId.slice(-8)}`,
       fullName: "Carlos Alberto Rodríguez",
-      cedula: "1018456789",
+      cedula: runId,
       address: "Calle 75 Sur # 14-20",
       phone: "3109876543",
       commissionName: "Deportes y Recreación",

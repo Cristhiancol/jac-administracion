@@ -58,13 +58,13 @@ export function JacShell({
       <header className="sticky top-0 z-50 border-b border-border bg-card/90 backdrop-blur-xl transition-colors shadow-xs">
         <div className="container flex h-20 items-center justify-between gap-4 py-3">
           {/* Logo & Brand Title */}
-          <Link href="/" className="group flex items-center gap-3">
-            <JacLogo size="md" variant="full" animated={true} />
+          <Link href="/" className="group flex shrink-0 items-center gap-2 lg:hidden 2xl:flex" aria-label="Inicio JAC Bellavista 1991">
+            <JacLogo size="sm" variant="icon" animated={true} />
           </Link>
 
           {/* Desktop Navigation */}
           <nav
-            className="hidden items-center gap-1.5 lg:flex"
+            className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 lg:flex"
             aria-label="Navegación principal"
           >
             {navigation.map((item) => {
@@ -75,7 +75,7 @@ export function JacShell({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-semibold transition-all duration-200",
+                    "inline-flex items-center gap-1 rounded-xl px-1.5 py-2 text-[13px] font-semibold transition-all duration-200 xl:px-2",
                     active
                       ? "bg-[#0F4C81] text-white shadow-sm dark:bg-[#1B8A5A]"
                       : "text-foreground/80 hover:bg-[#0F4C81]/10 hover:text-[#0F4C81] dark:hover:bg-emerald-950/40 dark:hover:text-emerald-300"
@@ -105,14 +105,14 @@ export function JacShell({
             {!loading &&
               (isAuthenticated ? (
                 <div className="flex items-center gap-2">
-                  <span className="hidden text-xs font-semibold text-emerald-800 dark:text-emerald-300 xl:inline-block bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-300/40">
+                  <span className="hidden text-xs font-semibold text-emerald-800 dark:text-emerald-300 2xl:inline-block bg-emerald-100 dark:bg-emerald-950/60 px-2.5 py-1 rounded-lg border border-emerald-300/40">
                     <UserCheck className="h-3.5 w-3.5 inline mr-1 text-emerald-600" />
                     {user?.name ? user.name.split(" ")[0] : "Afiliado"}
                   </span>
                   <Button
                     variant="outline"
                     onClick={logout}
-                    className="hidden rounded-xl border-emerald-700/20 bg-card hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/40 text-foreground sm:inline-flex text-xs font-bold"
+                    className="hidden rounded-xl border-emerald-700/20 bg-card hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950/40 text-foreground 2xl:inline-flex text-xs font-bold"
                   >
                     Salir
                   </Button>

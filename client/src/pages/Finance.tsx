@@ -28,7 +28,7 @@ import {
   WalletCards,
   PieChart,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { toast } from "sonner";
 
 const money = (value: number) =>
