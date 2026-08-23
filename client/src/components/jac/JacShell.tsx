@@ -3,13 +3,17 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import {
   Building2,
+  CalendarCheck,
   CalendarDays,
   Landmark,
   Menu,
   Moon,
   Newspaper,
+  QrCode,
   ShieldCheck,
   Sun,
+  Trophy,
+  Users,
   WalletCards,
   UserCheck,
 } from "lucide-react";
@@ -21,11 +25,15 @@ import { JacLogo } from "@/components/JacLogo";
 
 const navigation = [
   { href: "/", label: "Inicio", icon: Landmark },
+  { href: "/afiliados", label: "Afiliados", icon: Users },
+  { href: "/asambleas", label: "Asambleas", icon: QrCode },
+  { href: "/campeonatos", label: "Campeonatos", icon: Trophy },
   { href: "/plan-de-trabajo", label: "Plan comunal", icon: CalendarDays },
   { href: "/obligaciones", label: "Obligaciones", icon: ShieldCheck },
   { href: "/finanzas", label: "Finanzas", icon: WalletCards },
-  { href: "/institucion", label: "Ficha e Identidad", icon: Building2 },
-  { href: "/noticias", label: "Noticias Usme", icon: Newspaper },
+  { href: "/reservas", label: "Reservas", icon: CalendarCheck },
+  { href: "/institucion", label: "Identidad", icon: Building2 },
+  { href: "/noticias", label: "Noticias", icon: Newspaper },
 ];
 
 export function JacShell({

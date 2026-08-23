@@ -2,6 +2,9 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { affiliatesRouter } from "./routers/affiliates";
+import { assembliesRouter } from "./routers/assemblies";
+import { campaignsRouter, championshipsRouter } from "./routers/championships";
 import { financeRouter } from "./routers/finance";
 import { filesRouter } from "./routers/files";
 import { institutionalRouter } from "./routers/institutional";
@@ -23,6 +26,10 @@ export const appRouter = router({
       } as const;
     }),
   }),
+  affiliates: affiliatesRouter,
+  assemblies: assembliesRouter,
+  championships: championshipsRouter,
+  campaigns: campaignsRouter,
   institutional: institutionalRouter,
   workPlan: workPlanRouter,
   obligations: obligationsRouter,

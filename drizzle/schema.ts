@@ -255,3 +255,112 @@ export type FinancialBudget = typeof financialBudgets.$inferSelect;
 export type FacilityReservation = typeof facilityReservations.$inferSelect;
 export type InstitutionalNewsSource = typeof institutionalNewsSources.$inferSelect;
 export type InstitutionalNewsItem = typeof institutionalNewsItems.$inferSelect;
+
+export const affiliates = mysqlTable(
+  "affiliates",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    code: varchar("code", { length: 20 }).notNull(),
+    fullName: varchar("fullName", { length: 255 }).notNull(),
+    cedula: varchar("cedula", { length: 20 }).notNull(),
+    address: text("address"),
+    phone: varchar("phone", { length: 30 }),
+    commissionName: varchar("commissionName", { length: 160 }),
+    status: mysqlEnum("status", ["activo", "inactivo", "suspendido"]).notNull().default("activo"),
+    qrToken: varchar("qrToken", { length: 64 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    uniqueIndex("affiliate_cedula_unique").on(table.cedula),
+    index("affiliate_code_idx").on(table.code),
+    index("affiliate_status_idx").on(table.status),
+  ],
+);
+
+export const assemblies = mysqlTable(
+  "assemblies",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    title: varchar("title", { length: 255 }).notNull(),
+    assemblyType: mysqlEnum("assemblyType", ["ordinaria", "extraordinaria", "comite"]).notNull(),
+    scheduledAt: timestamp("scheduledAt").notNull(),
+    location: varchar("location", { length: 255 }),
+    qrCode: varchar("qrCode", { length: 500 }),
+    status: mysqlEnum("status", ["programada", "en_curso", "finalizada", "cancelada"]).notNull().default("programada"),
+    notes: text("notes"),
+    createdByUserId: int("createdByUserId").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    index("assembly_scheduled_idx").on(table.scheduledAt, table.status),
+  ],
+);
+
+export const assemblyAttendance = mysqlTable(
+  "assemblyAttendance",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    assemblyId: int("assemblyId").notNull(),
+    affiliateId: int("affiliateId").notNull(),
+    attended: int("attended").notNull().default(0),
+    checkedInAt: timestamp("checkedInAt"),
+    method: mysqlEnum("method", ["qr_scan", "cedula_manual", "lista"]).default("lista"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => [
+    uniqueIndex("attendance_unique").on(table.assemblyId, table.affiliateId),
+    index("attendance_assembly_idx").on(table.assemblyId, table.attended),
+  ],
+);
+
+export const championships = mysqlTable(
+  "championships",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    name: varchar("name", { length: 255 }).notNull(),
+    sport: varchar("sport", { length: 120 }).notNull(),
+    championshipType: mysqlEnum("championshipType", ["campeonato", "copa", "torneo_relampago"]).notNull(),
+    startsAt: timestamp("startsAt").notNull(),
+    endsAt: timestamp("endsAt"),
+    status: mysqlEnum("status", ["inscripcion", "en_curso", "finalizado", "cancelado"]).notNull().default("inscripcion"),
+    maxTeams: int("maxTeams"),
+    rules: text("rules"),
+    createdByUserId: int("createdByUserId").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    index("championship_status_idx").on(table.status, table.startsAt),
+  ],
+);
+
+export const campaigns = mysqlTable(
+  "campaigns",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    title: varchar("title", { length: 255 }).notNull(),
+    campaignType: mysqlEnum("campaignType", ["ambiental", "salud", "cultural", "educativa", "deportiva", "otra"]).notNull(),
+    description: text("description"),
+    startsAt: timestamp("startsAt").notNull(),
+    endsAt: timestamp("endsAt"),
+    status: mysqlEnum("status", ["planeada", "activa", "completada", "cancelada"]).notNull().default("planeada"),
+    createdByUserId: int("createdByUserId").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => [
+    index("campaign_status_idx").on(table.status, table.startsAt),
+  ],
+);
+
+export type Affiliate = typeof affiliates.$inferSelect;
+export type InsertAffiliate = typeof affiliates.$inferInsert;
+export type Assembly = typeof assemblies.$inferSelect;
+export type InsertAssembly = typeof assemblies.$inferInsert;
+export type AssemblyAttendance = typeof assemblyAttendance.$inferSelect;
+export type Championship = typeof championships.$inferSelect;
+export type InsertChampionship = typeof championships.$inferInsert;
+export type Campaign = typeof campaigns.$inferSelect;
+export type InsertCampaign = typeof campaigns.$inferInsert;

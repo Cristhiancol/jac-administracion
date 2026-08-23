@@ -52,3 +52,45 @@ export const financialMovementSchema = z.object({
   activityId: z.number().int().positive().nullable().optional(),
   supportUrl: z.string().url().max(1000).nullable().optional(),
 });
+
+export const affiliateSchema = z.object({
+  code: z.string().trim().min(1).max(20),
+  fullName: z.string().trim().min(3).max(255),
+  cedula: z.string().trim().min(5).max(20),
+  address: z.string().trim().max(500).nullable().optional(),
+  phone: z.string().trim().max(30).nullable().optional(),
+  commissionName: z.string().trim().max(160).nullable().optional(),
+});
+
+export const assemblySchema = z.object({
+  title: z.string().trim().min(5).max(255),
+  assemblyType: z.enum(["ordinaria", "extraordinaria", "comite"]),
+  scheduledAt: z.coerce.date(),
+  location: z.string().trim().max(255).nullable().optional(),
+  notes: z.string().trim().max(2000).nullable().optional(),
+});
+
+export const attendanceCheckInSchema = z.object({
+  assemblyId: z.number().int().positive(),
+  cedula: z.string().trim().min(5).max(20),
+  method: z.enum(["qr_scan", "cedula_manual"]).default("cedula_manual"),
+});
+
+export const championshipSchema = z.object({
+  name: z.string().trim().min(3).max(255),
+  sport: z.string().trim().min(2).max(120),
+  championshipType: z.enum(["campeonato", "copa", "torneo_relampago"]),
+  startsAt: z.coerce.date(),
+  endsAt: z.coerce.date().nullable().optional(),
+  maxTeams: z.number().int().positive().nullable().optional(),
+  rules: z.string().trim().max(5000).nullable().optional(),
+});
+
+export const campaignSchema = z.object({
+  title: z.string().trim().min(3).max(255),
+  campaignType: z.enum(["ambiental", "salud", "cultural", "educativa", "deportiva", "otra"]),
+  description: z.string().trim().max(5000).nullable().optional(),
+  startsAt: z.coerce.date(),
+  endsAt: z.coerce.date().nullable().optional(),
+});
+

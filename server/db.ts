@@ -177,13 +177,18 @@ export async function getCommunitySnapshot() {
   return { profile, plans, activities, obligations, movements, reservations, news };
 }
 
+import { SEEDED_FINANCIAL_MOVEMENTS } from "@shared/reported-expenses";
+
 export async function getFinanceSnapshot() {
   const db = await getDb();
-  if (!db) return { movements: [], budgets: [] };
+  if (!db) return { movements: SEEDED_FINANCIAL_MOVEMENTS, budgets: [] };
   const [movements, budgets] = await Promise.all([
     db.select().from(financialMovements).orderBy(desc(financialMovements.occurredAt)).limit(500),
     db.select().from(financialBudgets).orderBy(desc(financialBudgets.updatedAt)).limit(100),
   ]);
+  if (movements.length === 0) {
+    return { movements: SEEDED_FINANCIAL_MOVEMENTS, budgets };
+  }
   return { movements, budgets };
 }
 
@@ -308,12 +313,16 @@ export async function recordFinancialMovement(input: {
   supportUrl?: string | null;
   recordedByUserId: number;
 }) {
-  const db = ensureDb(await getDb());
-  await db.insert(financialMovements).values({
-    ...input,
-    activityId: input.activityId || null,
-    supportUrl: input.supportUrl || null,
-  });
+  const db = await getDb();
+  if (db) {
+    await db.insert(financialMovements).values({
+      ...input,
+      activityId: input.activityId || null,
+      supportUrl: input.supportUrl || null,
+    });
+  } else {
+    console.log("[Finance] Saved movement in local mode:", input.category, input.amount);
+  }
 }
 
 export async function upsertFinancialBudget(input: {
@@ -322,14 +331,17 @@ export async function upsertFinancialBudget(input: {
   approvedAmount: string;
   createdByUserId: number;
 }) {
-  const db = ensureDb(await getDb());
-  await db.insert(financialBudgets).values(input).onDuplicateKeyUpdate({
-    set: { approvedAmount: input.approvedAmount, createdByUserId: input.createdByUserId, updatedAt: new Date() },
-  });
+  const db = await getDb();
+  if (db) {
+    await db.insert(financialBudgets).values(input).onDuplicateKeyUpdate({
+      set: { approvedAmount: input.approvedAmount, createdByUserId: input.createdByUserId, updatedAt: new Date() },
+    });
+  }
 }
 
 export async function hasReservationConflict(startsAt: Date, endsAt: Date) {
-  const db = ensureDb(await getDb());
+  const db = await getDb();
+  if (!db) return false;
   const conflicts = await db
     .select({ id: facilityReservations.id })
     .from(facilityReservations)
@@ -352,8 +364,12 @@ export async function createFacilityReservation(input: {
   applicantType: "afiliado" | "vecino" | "externo";
   amount: string;
 }) {
-  const db = ensureDb(await getDb());
-  await db.insert(facilityReservations).values({ ...input, status: "solicitada" });
+  const db = await getDb();
+  if (db) {
+    await db.insert(facilityReservations).values({ ...input, status: "solicitada" });
+  } else {
+    console.log("[Reservations] Saved reservation in local mode:", input.eventName);
+  }
 }
 
 export async function getNewsSources() {

@@ -1,49 +1,56 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 220" width="200" height="220">
   <defs>
-    <linearGradient id="blueGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0F4C81" />
-      <stop offset="100%" stop-color="#1E3A8A" />
+    <linearGradient id="blueRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0D4A7A" />
+      <stop offset="50%" stop-color="#0F4C81" />
+      <stop offset="100%" stop-color="#1A5A94" />
     </linearGradient>
-    <linearGradient id="greenGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1B8A5A" />
-      <stop offset="100%" stop-color="#166534" />
+    <linearGradient id="gold" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#E8B830" />
+      <stop offset="40%" stop-color="#D99B00" />
+      <stop offset="100%" stop-color="#C88A00" />
     </linearGradient>
-    <linearGradient id="goldGradFav" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FACC15" />
-      <stop offset="50%" stop-color="#F59E0B" />
-      <stop offset="100%" stop-color="#D97706" />
+    <linearGradient id="ribbon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0D4070" />
+      <stop offset="50%" stop-color="#0F4C81" />
+      <stop offset="100%" stop-color="#0D4070" />
     </linearGradient>
+    <path id="topText" d="M 28,100 A 72,72 0 0,1 172,100" />
+    <path id="bottomText" d="M 38,105 A 65,65 0 0,0 162,105" />
   </defs>
 
-  <!-- Outer Ring -->
-  <circle cx="60" cy="60" r="56" fill="url(#blueGradFav)" stroke="#FACC15" stroke-width="3" />
-  <circle cx="60" cy="60" r="46" fill="url(#greenGradFav)" stroke="#FFFFFF" stroke-width="1.5" />
+  <!-- Outer Blue Ring -->
+  <circle cx="100" cy="100" r="92" fill="url(#blueRing)" />
 
-  <!-- Usme Mountains -->
-  <path d="M14 74 Q 38 52, 60 64 Q 82 48, 106 74 Z" fill="#15803D" opacity="0.9" />
-  <path d="M14 80 Q 40 62, 60 72 Q 80 58, 106 80 Z" fill="#166534" />
+  <!-- Top Curved Text -->
+  <text fill="#FFFFFF" font-size="15" font-weight="800" font-family="Arial, sans-serif" letter-spacing="3">
+    <textPath href="#topText" startOffset="50%" text-anchor="middle">TODOS SOMOS COMUNIDAD</textPath>
+  </text>
 
-  <!-- Sun -->
-  <circle cx="60" cy="38" r="11" fill="url(#goldGradFav)" />
+  <!-- Bottom Curved Text -->
+  <text fill="#FFFFFF" font-size="18" font-weight="800" font-family="Arial, sans-serif" letter-spacing="5">
+    <textPath href="#bottomText" startOffset="50%" text-anchor="middle">BELLAVISTA</textPath>
+  </text>
 
-  <!-- Handshake Emblem -->
-  <g transform="translate(60, 66) scale(1)">
-    <!-- Left Arm -->
-    <path d="M-34 4 L-18 4 L-10 -4 L-18 -12 L-34 -12 Z" fill="#0F4C81" stroke="#FFFFFF" stroke-width="1" />
-    <!-- Right Arm -->
-    <path d="M34 4 L18 4 L10 -4 L18 -12 L34 -12 Z" fill="#1B8A5A" stroke="#FFFFFF" stroke-width="1" />
-    <!-- Left Hand -->
-    <path d="M-16 -4 C-12 -14, -2 -14, 0 -8 C2 -6, -2 4, -10 6 Z" fill="url(#goldGradFav)" stroke="#78350F" stroke-width="1" />
-    <!-- Right Hand -->
-    <path d="M16 -4 C12 -14, 2 -14, 0 -8 C-2 -6, 2 4, 10 6 Z" fill="#FBBF24" stroke="#78350F" stroke-width="1" />
-    <!-- Fingers -->
-    <path d="M-7 -4 Q0 -2 7 -4" stroke="#78350F" stroke-width="1.5" stroke-linecap="round" />
-    <path d="M-5 0 Q0 2 5 0" stroke="#78350F" stroke-width="1.5" stroke-linecap="round" />
+  <!-- Inner White Circle -->
+  <circle cx="100" cy="100" r="64" fill="#FFFFFF" />
+  <circle cx="100" cy="100" r="62" fill="none" stroke="#1B8A5A" stroke-width="2" />
+
+  <!-- Golden Handshake -->
+  <g transform="translate(100, 98) scale(1.15)">
+    <path d="M-42 8 C-42 8,-38 -4,-28 -8 L-14 -14 C-10 -16,-6 -14,-4 -10 L-2 -4 C0 -1,-4 4,-8 6 L-18 12 C-24 14,-32 14,-42 8 Z" fill="url(#gold)" stroke="#A67C00" stroke-width="0.8" />
+    <path d="M42 8 C42 8,38 -4,28 -8 L14 -14 C10 -16,6 -14,4 -10 L2 -4 C0 -1,4 4,8 6 L18 12 C24 14,32 14,42 8 Z" fill="url(#gold)" stroke="#A67C00" stroke-width="0.8" />
+    <path d="M-14 -14 C-8 -18,8 -18,14 -14 L8 -6 C4 -2,-4 -2,-8 -6 Z" fill="url(#gold)" stroke="#A67C00" stroke-width="0.6" />
+    <path d="M-10 2 Q-6 6,0 6 Q6 6,10 2" stroke="#A67C00" stroke-width="1.8" fill="none" stroke-linecap="round" />
+    <path d="M-8 8 Q-4 12,0 12 Q4 12,8 8" stroke="#A67C00" stroke-width="1.8" fill="none" stroke-linecap="round" />
+    <path d="M-5 14 Q-2 17,0 17 Q2 17,5 14" stroke="#A67C00" stroke-width="1.5" fill="none" stroke-linecap="round" />
+    <path d="M-18 -2 C-16 -6,-12 -8,-8 -6" stroke="#A67C00" stroke-width="1.2" fill="none" stroke-linecap="round" />
+    <path d="M18 -2 C16 -6,12 -8,8 -6" stroke="#A67C00" stroke-width="1.2" fill="none" stroke-linecap="round" />
   </g>
 
-  <!-- Ribbon -->
-  <path d="M16 94 Q60 106 104 94 L98 112 Q60 120 22 112 Z" fill="#0F4C81" stroke="#FACC15" stroke-width="1.2" />
-  <text x="60" y="106" text-anchor="middle" fill="#FACC15" font-size="6" font-weight="bold" font-family="sans-serif">
-    1991
-  </text>
+  <!-- Bottom Ribbon -->
+  <path d="M38 178 L32 195 L50 188 Z" fill="url(#ribbon)" />
+  <path d="M162 178 L168 195 L150 188 Z" fill="url(#ribbon)" />
+  <path d="M40 168 Q100 180,160 168 L162 182 Q100 194,38 182 Z" fill="url(#ribbon)" stroke="#0A3A66" stroke-width="1" />
+  <text x="100" y="180" text-anchor="middle" fill="#FFFFFF" font-size="18" font-weight="800" font-family="Georgia, serif" font-style="italic" letter-spacing="3">1991</text>
 </svg>

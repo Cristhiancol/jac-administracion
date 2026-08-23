@@ -1,10 +1,14 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Affiliates from "@/pages/Affiliates";
+import Assemblies from "@/pages/Assemblies";
+import Championships from "@/pages/Championships";
 import Finance from "@/pages/Finance";
 import InstitutionalProfile from "@/pages/InstitutionalProfile";
 import News from "@/pages/News";
 import Obligations from "@/pages/Obligations";
 import NotFound from "@/pages/NotFound";
+import Reservations from "@/pages/Reservations";
 import WorkPlan from "@/pages/WorkPlan";
 import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -16,9 +20,13 @@ function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
+      <Route path={"/afiliados"} component={Affiliates} />
+      <Route path={"/asambleas"} component={Assemblies} />
+      <Route path={"/campeonatos"} component={Championships} />
       <Route path={"/plan-de-trabajo"} component={WorkPlan} />
       <Route path={"/obligaciones"} component={Obligations} />
       <Route path={"/finanzas"} component={Finance} />
+      <Route path={"/reservas"} component={Reservations} />
       <Route path={"/institucion"} component={InstitutionalProfile} />
       <Route path={"/noticias"} component={News} />
       <Route path={"/404"} component={NotFound} />
@@ -50,3 +58,4 @@ function App() {
 }
 
 export default App;
+
