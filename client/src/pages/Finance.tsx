@@ -293,12 +293,12 @@ export default function Finance() {
   return (
     <JacShell
       eyebrow="Tesorería & Auditoría Comunal"
-      title="Estado de Resultados & Gestión Financiera"
+      title="Gestión Financiera & Gastos Consolidados"
       description="Estado de pérdidas y ganancias (P&L), gráfico de gastos, importación Excel y verificación de recaudos por alquiler."
     >
       {/* Sub-Navigation Bar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-4">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             onClick={() => setActiveTab("pnl")}
             variant={activeTab === "pnl" ? "default" : "outline"}
@@ -309,7 +309,7 @@ export default function Finance() {
             }`}
           >
             <TrendingUp className="h-4 w-4 text-amber-300" />
-            Estado de Resultados (P&L Dashboard)
+            Estado de Resultados (P&L Charts)
           </Button>
           <Button
             onClick={() => setActiveTab("reporte")}
@@ -421,9 +421,123 @@ export default function Finance() {
         </Card>
       )}
 
-      {/* TAB: ESTADO DE RESULTADOS (P&L DASHBOARD & RECHARTS) */}
+      {/* SUMMARY BANNER METRICS FOR ALL TABS */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+        <Card className="border-border bg-card shadow-sm rounded-2xl">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Gastos 2025</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-950 px-2 py-0.5 rounded-md">
+                Ejecutado
+              </span>
+            </div>
+            <p className="mt-2 font-serif text-2xl font-black text-foreground">{money(TOTAL_EXPENSES_2025)}</p>
+            <p className="mt-1 text-xs text-muted-foreground">30.3% del acumulado total</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card shadow-sm rounded-2xl">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Gastos 2026</span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#1B8A5A] dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 rounded-md">
+                En Curso
+              </span>
+            </div>
+            <p className="mt-2 font-serif text-2xl font-black text-[#1B8A5A] dark:text-emerald-400">
+              {money(TOTAL_EXPENSES_2026)}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">69.7% del acumulado total</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-border bg-card shadow-sm rounded-2xl">
+          <CardContent className="p-5">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Gran Total Consolidado
+              </span>
+              <span className="text-[10px] font-black uppercase tracking-wider text-[#0F4C81] dark:text-blue-300 bg-blue-100 dark:bg-blue-950 px-2 py-0.5 rounded-md">
+                Verificado
+              </span>
+            </div>
+            <p className="mt-2 font-serif text-2xl font-black text-[#0F4C81] dark:text-blue-300">
+              {money(TOTAL_EXPENSES_ALL)}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Trazabilidad oficial Bellavista 1991</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* RECHARTS DASHBOARD & P&L CARDS */}
       {activeTab === "pnl" && (
         <div className="space-y-8 animate-in fade-in-50 duration-300">
+          {/* Recharts Visual Dashboard */}
+          <div className="grid gap-6 xl:grid-cols-2">
+            {/* Bar Chart: Monthly Expenses Comparison */}
+            <Card className="border-border bg-card shadow-sm rounded-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-foreground flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5 text-[#0F4C81]" />
+                      Evolución Mensual de Gastos (COP)
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Comparativa de ejecución en 2025 vs 2026</p>
+                  </div>
+                </div>
+
+                <div className="h-64 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={chartMonthlyData}>
+                      <XAxis dataKey="month" stroke="#888888" fontSize={11} />
+                      <YAxis stroke="#888888" fontSize={10} tickFormatter={(v) => `$${v / 1000}k`} />
+                      <Tooltip formatter={(value: number) => money(value)} />
+                      <Bar dataKey="2025" fill="#0F4C81" radius={[4, 4, 0, 0]} name="2025" />
+                      <Bar dataKey="2026" fill="#1B8A5A" radius={[4, 4, 0, 0]} name="2026" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pie Chart: Expenses Distribution by Category */}
+            <Card className="border-border bg-card shadow-sm rounded-2xl">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="font-serif text-lg font-bold text-foreground flex items-center gap-2">
+                      <PieIcon className="h-5 w-5 text-[#1B8A5A]" />
+                      Distribución de Gastos por Categoría
+                    </h3>
+                    <p className="text-xs text-muted-foreground">Proporción del acumulado general de egresos</p>
+                  </div>
+                </div>
+
+                <div className="h-64 w-full flex items-center justify-center">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RechartsPieChart>
+                      <Pie
+                        data={chartCategoryData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={55}
+                        outerRadius={80}
+                        paddingAngle={3}
+                        dataKey="value"
+                      >
+                        {chartCategoryData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value: number) => money(value)} />
+                    </RechartsPieChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
           {/* P&L Accounting Statement Summary Cards */}
           <div className="grid gap-4 sm:grid-cols-4">
             <Card className="border-border bg-card shadow-sm rounded-2xl">
@@ -463,66 +577,6 @@ export default function Finance() {
                 <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Control Auditable</p>
                 <p className="mt-2 font-serif text-2xl font-black text-foreground">100%</p>
                 <p className="mt-1 text-xs text-muted-foreground">Soportes & Personería 1991</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Recharts Visual Dashboard */}
-          <div className="grid gap-6 xl:grid-cols-2">
-            {/* Bar Chart: Monthly Expenses Comparison */}
-            <Card className="border-border bg-card shadow-sm rounded-2xl">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="font-serif text-lg font-bold text-foreground">Evolución Mensual de Gastos (COP)</h3>
-                    <p className="text-xs text-muted-foreground">Comparativa de ejecución en 2025 vs 2026</p>
-                  </div>
-                </div>
-
-                <div className="h-64 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={chartMonthlyData}>
-                      <XAxis dataKey="month" stroke="#888888" fontSize={11} />
-                      <YAxis stroke="#888888" fontSize={10} tickFormatter={(v) => `$${v / 1000}k`} />
-                      <Tooltip formatter={(value: number) => money(value)} />
-                      <Bar dataKey="2025" fill="#0F4C81" radius={[4, 4, 0, 0]} name="2025" />
-                      <Bar dataKey="2026" fill="#1B8A5A" radius={[4, 4, 0, 0]} name="2026" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Pie Chart: Expenses Distribution by Category */}
-            <Card className="border-border bg-card shadow-sm rounded-2xl">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h3 className="font-serif text-lg font-bold text-foreground">Distribución de Gastos por Categoría</h3>
-                    <p className="text-xs text-muted-foreground">Proporción del acumulado general de egresos</p>
-                  </div>
-                </div>
-
-                <div className="h-64 w-full flex items-center justify-center">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RechartsPieChart>
-                      <Pie
-                        data={chartCategoryData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={55}
-                        outerRadius={80}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {chartCategoryData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={CHART_COLORS[index % CHART_COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value: number) => money(value)} />
-                    </RechartsPieChart>
-                  </ResponsiveContainer>
-                </div>
               </CardContent>
             </Card>
           </div>
@@ -653,6 +707,62 @@ export default function Finance() {
                         {money(TOTAL_EXPENSES_ALL)}
                       </td>
                       <td className="p-4 text-center font-bold">100.0%</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Table 2: Expenses by Month */}
+          <Card className="border-border bg-card shadow-sm rounded-2xl overflow-hidden">
+            <div className="border-b border-border bg-[#1B8A5A]/10 dark:bg-emerald-950/40 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="font-serif text-xl font-extrabold text-foreground flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-[#1B8A5A]" />
+                  Evolución Mensual de Gastos Reportados (2025 - 2026)
+                </h3>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  Distribución temporal de los gastos mensuales ejecutados por la junta.
+                </p>
+              </div>
+            </div>
+
+            <CardContent className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="border-b border-border bg-muted/50 text-xs font-black text-muted-foreground uppercase tracking-wider">
+                      <th className="p-4">Mes Reportado</th>
+                      <th className="p-4 text-right">Vigencia 2025</th>
+                      <th className="p-4 text-right">Vigencia 2026</th>
+                      <th className="p-4 text-right">Total Acumulado</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border font-medium">
+                    {REPORTED_EXPENSES_BY_MONTH.map((item, idx) => (
+                      <tr key={idx} className="hover:bg-muted/40 transition-colors">
+                        <td className="p-4 font-bold text-foreground">{item.month}</td>
+                        <td className="p-4 text-right font-mono text-muted-foreground">
+                          {item.year2025 !== null ? money(item.year2025) : "—"}
+                        </td>
+                        <td className="p-4 text-right font-mono text-muted-foreground">
+                          {item.year2026 !== null ? money(item.year2026) : "—"}
+                        </td>
+                        <td className="p-4 text-right font-mono font-bold text-[#1B8A5A] dark:text-emerald-400">
+                          {money(item.total)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t-2 border-border bg-muted/80 font-black text-sm text-foreground">
+                      <td className="p-4">TOTAL GENERAL ACUMULADO</td>
+                      <td className="p-4 text-right font-mono">{money(TOTAL_EXPENSES_2025)}</td>
+                      <td className="p-4 text-right font-mono">{money(TOTAL_EXPENSES_2026)}</td>
+                      <td className="p-4 text-right font-mono text-[#1B8A5A] dark:text-emerald-400">
+                        {money(TOTAL_EXPENSES_ALL)}
+                      </td>
                     </tr>
                   </tfoot>
                 </table>
