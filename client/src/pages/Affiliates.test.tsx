@@ -6,27 +6,27 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 const affiliate = {
   id: 1,
-  code: "AF-1991",
-  fullName: "María Bellavista",
-  cedula: "123456789",
+  code: "AF-999",
+  fullName: "Afiliado de Prueba",
+  cedula: "1018456789",
   address: null,
   phone: null,
   commissionName: "Deportes",
   status: "activo" as const,
-  qrToken: null,
+  qrToken: "TOKEN-INSTITUCIONAL-7K2P",
   createdAt: new Date(),
   updatedAt: new Date(),
-  attendedLastAssembly: false,
+  attendedLastAssembly: true,
 };
 
 vi.mock("@/_core/hooks/useAuth", () => ({
-  useAuth: () => ({ user: { role: "admin", name: "Directiva" } }),
+  useAuth: () => ({ user: { id: 1, role: "admin", name: "Directiva" } }),
 }));
 
 vi.mock("@/lib/trpc", () => ({
   trpc: {
     affiliates: {
-      list: { useQuery: () => ({ data: [affiliate], refetch: vi.fn(), isLoading: false }) },
+      list: { useQuery: () => ({ data: [affiliate], isLoading: false, refetch: vi.fn() }) },
       create: { useMutation: () => ({ mutate: vi.fn() }) },
       bulkImport: { useMutation: () => ({ mutate: vi.fn() }) },
       remove: { useMutation: () => ({ mutate: vi.fn() }) },
@@ -42,31 +42,34 @@ import Affiliates from "./Affiliates";
 
 afterEach(() => {
   cleanup();
-  window.history.replaceState({}, "", "/");
+  window.history.replaceState({}, "", "/afiliados");
 });
 
-function expectLocalCard(card: HTMLElement) {
+function expectInstitutionalCard(card: HTMLElement) {
   expect(within(card).getByText("Carnet digital")).toBeVisible();
-  expect(within(card).getByText("María Bellavista")).toBeVisible();
+  expect(within(card).getByText("Afiliado de Prueba")).toBeVisible();
   expect(
     within(card).getByRole("img", { name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i }),
   ).toHaveAttribute("src", "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp");
   expect(within(card).getByTestId("affiliate-card-local-qr")).toHaveAttribute(
     "data-credential-source",
-    "affiliate-code",
+    "institutional-token",
   );
 }
 
-describe("interacción de carnet QR de afiliados", () => {
-  it("abre el overlay real y muestra el emblema oficial actualizado", () => {
+describe("carnet QR de Afiliados", () => {
+  it("abre el carnet administrativo con QR local basado en token institucional", () => {
     render(<Affiliates />);
+
     fireEvent.click(screen.getByTitle("Generar QR Carnet"));
-    expectLocalCard(screen.getByTestId("affiliate-qr-card"));
+
+    expectInstitutionalCard(screen.getByTestId("affiliate-qr-card"));
   });
 
-  it("abre el carnet oficial cuando la cédula conocida llega en el parámetro administrativo", () => {
-    window.history.replaceState({}, "", "/afiliados?carnet=123456789");
+  it("abre el carnet desde el parámetro administrativo", () => {
+    window.history.replaceState({}, "", "/afiliados?carnet=1018456789");
     render(<Affiliates />);
-    expectLocalCard(screen.getByTestId("affiliate-qr-card"));
+
+    expectInstitutionalCard(screen.getByTestId("affiliate-qr-card"));
   });
 });

@@ -3,6 +3,7 @@ import { JacShell } from "@/components/jac/JacShell";
 import { DigitalAffiliateCard } from "@/components/affiliate/DigitalAffiliateCard";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
+import { buildAffiliateQrPayload } from "@/lib/affiliate-qr";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
   Upload,
@@ -44,7 +45,15 @@ interface AffiliateFormData {
  * from data without sending anything to external servers.
  * Uses a deterministic hash to create a unique visual pattern per affiliate.
  */
-function LocalQrCode({ data, size = 100 }: { data: string; size?: number }) {
+function LocalQrCode({
+  data,
+  size = 100,
+  credentialSource,
+}: {
+  data: string;
+  size?: number;
+  credentialSource: "institutional-token" | "affiliate-code";
+}) {
   const cells = 11;
   const cellSize = size / cells;
 
@@ -86,7 +95,14 @@ function LocalQrCode({ data, size = 100 }: { data: string; size?: number }) {
   }
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rounded-md">
+    <svg
+      data-testid="local-qr-code"
+      data-credential-source={credentialSource}
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className="rounded-md"
+    >
       <rect width={size} height={size} fill="white" />
       {grid.map((row, r) =>
         row.map((filled, c) =>
@@ -343,9 +359,7 @@ export default function Affiliates() {
                               <Trash2 className="h-4 w-4" />
                             </button>
                           </div>
-                          {activeQr === affiliate.cedula && (
-                            <DigitalAffiliateCard affiliate={affiliate} />
-                          )}
+                          {activeQr === affiliate.cedula && <DigitalAffiliateCard affiliate={affiliate} />}
                         </td>
                       )}
                     </tr>

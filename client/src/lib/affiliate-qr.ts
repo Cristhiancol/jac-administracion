@@ -3,7 +3,10 @@ export type AffiliateQrIdentity = {
   qrToken: string | null;
 };
 
-/** Construye una credencial QR institucional sin incorporar la cédula del afiliado. */
+/**
+ * Construye el identificador visual de la credencial sin incorporar la cédula.
+ * El token QR se emite y almacena como identificador institucional independiente.
+ */
 export function buildAffiliateQrPayload({ code, qrToken }: AffiliateQrIdentity) {
   return `JAC-BV91-${qrToken ?? code}`;
 }
