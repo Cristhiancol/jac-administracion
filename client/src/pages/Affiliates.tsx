@@ -44,7 +44,15 @@ interface AffiliateFormData {
  * from data without sending anything to external servers.
  * Uses a deterministic hash to create a unique visual pattern per affiliate.
  */
-function LocalQrCode({ data, size = 100 }: { data: string; size?: number }) {
+function LocalQrCode({
+  data,
+  size = 100,
+  credentialSource,
+}: {
+  data: string;
+  size?: number;
+  credentialSource: "institutional-token" | "affiliate-code";
+}) {
   const cells = 11;
   const cellSize = size / cells;
 
@@ -86,7 +94,14 @@ function LocalQrCode({ data, size = 100 }: { data: string; size?: number }) {
   }
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rounded-md">
+    <svg
+      data-testid="local-qr-code"
+      data-credential-source={credentialSource}
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className="rounded-md"
+    >
       <rect width={size} height={size} fill="white" />
       {grid.map((row, r) =>
         row.map((filled, c) =>
@@ -122,7 +137,10 @@ export default function Affiliates() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [formData, setFormData] = useState<AffiliateFormData>(initialFormState);
-  const [activeQr, setActiveQr] = useState<string | null>(null);
+  const [activeQr, setActiveQr] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
+    return new URLSearchParams(window.location.search).get("carnet");
+  });
 
   // tRPC Queries & Mutations
   const { data: affiliates = [], refetch, isLoading } = trpc.affiliates.list.useQuery();
@@ -341,10 +359,14 @@ export default function Affiliates() {
                             </button>
                           </div>
                           {activeQr === affiliate.cedula && (
-                            <div className="absolute right-10 mt-2 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center gap-2">
+                            <div
+                              data-testid="affiliate-qr-overlay"
+                              className="absolute right-10 mt-2 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center gap-2"
+                            >
                               <LocalQrCode
                                 data={buildAffiliateQrPayload({ code: affiliate.code, qrToken: affiliate.qrToken })}
                                 size={100}
+                                credentialSource={affiliate.qrToken ? "institutional-token" : "affiliate-code"}
                               />
                               <span className="text-[11px] font-mono font-bold text-muted-foreground tracking-wider">
                                 C.C. {affiliate.cedula}
