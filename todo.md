@@ -86,11 +86,11 @@
 - [x] Añadir una prueba que demuestre que el contenido de QR no incluye la cédula del afiliado.
 - [x] Validar, compilar, reiniciar la vista previa y sincronizar en Git la corrección de privacidad del QR.
 - [x] Hacer idempotentes las pruebas de afiliados y reservas para que no colisionen con datos persistidos durante la validación del QR.
-- [ ] Hacer commit y push de la corrección QR y las pruebas idempotentes, y verificar que el árbol de trabajo quede limpio.
+- [x] Hacer commit y push de la corrección QR y las pruebas idempotentes, y verificar que el árbol de trabajo quede limpio.
 - [x] Verificar la vista previa posterior al push, confirmando que el QR utiliza token institucional y no cédula.
 - [x] Abrir el carnet QR administrativo en la vista previa posterior al push y capturar el overlay activo con la credencial local.
 - [x] Añadir una prueba de interfaz que ejercite el overlay de Afiliados y confirme que su payload QR no contiene la cédula.
 - [x] Aislar los renders de la prueba de overlay QR para evitar credenciales duplicadas entre casos de interfaz.
 - [x] Marcar y comprobar en el overlay que el patrón QR se construye desde un identificador institucional, no desde la cédula.
 - [ ] Reiniciar la vista previa después de la corrección de privacidad del QR y verificar explícitamente que el carnet administrativo usa token institucional y no cédula.
-- [ ] Completar el commit final de la integración de privacidad del QR, hacer push exitoso a `user_github/main` y verificar el hash remoto resultante con `git status` limpio.
+- [x] Completar el commit final de la integración de privacidad del QR, hacer push exitoso a `user_github/main` y verificar el hash remoto resultante con `git status` limpio.
