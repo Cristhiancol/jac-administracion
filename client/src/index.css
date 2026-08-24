@@ -143,13 +143,41 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased selection:bg-amber-400/30 selection:text-amber-900;
     font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.01em;
+    line-height: 1.6;
   }
   h1, h2, h3, .font-serif {
     font-family: "Playfair Display", Georgia, serif;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
   }
+  h1 { font-weight: 900; }
+  h2 { font-weight: 800; }
+  h3 { font-weight: 700; }
+
+  /* Monospaced financial data and tables */
+  .font-mono, table td.font-mono {
+    font-family: "Inter", "DM Sans", ui-monospace, monospace;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Improved focus ring for accessibility */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
