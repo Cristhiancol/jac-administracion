@@ -1,5 +1,25 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
+import { eq } from "drizzle-orm";
+import {
+  affiliates,
+  assemblies,
+  campaigns,
+  championships,
+  facilityReservations,
+  financialMovements,
+} from "../drizzle/schema";
+import { getDb } from "./db";
 import { appRouter } from "./routers";
+
+const testRunId = `${Date.now()}${Math.floor(Math.random() * 100000)}`;
+const testMarker = `[PRUEBA-AUTOMATIZADA-${testRunId}]`;
+const testFinanceDescription = `${testMarker} Compra de pintura e insumos para salón comunal Bellavista`;
+const testChampionshipName = `${testMarker} Copa Relámpago Bellavista 2026`;
+const testCampaignTitle = `${testMarker} Jornada de Arbolización Páramo de Usme`;
+const testAffiliateName = `${testMarker} Carlos Alberto Rodríguez`;
+const testAffiliateCode = `TEST-${testRunId.slice(-8)}`;
+const testAssemblyTitle = `${testMarker} Asamblea Extraordinaria Presupuesto 2026`;
+const testReservationName = `${testMarker} Reunión de Integración Comunitaria`;
 
 function createCaller(user = { id: 1, openId: "test-user-123", role: "admin" as const, jacRole: "directiva" as const }) {
   return appRouter.createCaller({
@@ -9,6 +29,18 @@ function createCaller(user = { id: 1, openId: "test-user-123", role: "admin" as 
   });
 }
 
+afterAll(async () => {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.delete(facilityReservations).where(eq(facilityReservations.eventName, testReservationName));
+  await db.delete(assemblies).where(eq(assemblies.title, testAssemblyTitle));
+  await db.delete(affiliates).where(eq(affiliates.code, testAffiliateCode));
+  await db.delete(championships).where(eq(championships.name, testChampionshipName));
+  await db.delete(campaigns).where(eq(campaigns.title, testCampaignTitle));
+  await db.delete(financialMovements).where(eq(financialMovements.description, testFinanceDescription));
+});
+
 describe("Verificación de Guardado y Persistencia de Información (End-to-End)", () => {
   it("permite registrar un gasto/egreso financiero y guardarlo en el sistema", async () => {
     const caller = createCaller();
@@ -16,7 +48,7 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
       movementType: "egreso",
       category: "Materiales y mantenimiento",
       source: "Caja Menor JAC",
-      description: "Compra de pintura e insumos para salón comunal Bellavista",
+      description: testFinanceDescription,
       amount: "450000",
       occurredAt: new Date("2026-08-20"),
     });
@@ -31,7 +63,7 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
   it("permite crear un campeonato deportivo y guardarlo en el sistema", async () => {
     const caller = createCaller();
     const result = await caller.championships.create({
-      name: "Copa Relámpago Bellavista 2026",
+      name: testChampionshipName,
       sport: "Microfútbol",
       championshipType: "copa",
       startsAt: new Date("2026-09-01"),
@@ -49,7 +81,7 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
   it("permite crear una campaña comunitaria y guardarla en el sistema", async () => {
     const caller = createCaller();
     const result = await caller.campaigns.create({
-      title: "Jornada de Arbolización Páramo de Usme",
+      title: testCampaignTitle,
       campaignType: "ambiental",
       description: "Siembra de 200 frailejones y especies nativas con la comunidad",
       startsAt: new Date("2026-09-10"),
@@ -63,11 +95,10 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
 
   it("permite registrar un nuevo afiliado y guardarlo en el libro", async () => {
     const caller = createCaller();
-    const uniqueId = `${Date.now()}${Math.floor(Math.random() * 100000)}`;
     const result = await caller.affiliates.create({
-      code: `AF-${uniqueId.slice(-8)}`,
-      fullName: "Carlos Alberto Rodríguez",
-      cedula: uniqueId,
+      code: testAffiliateCode,
+      fullName: testAffiliateName,
+      cedula: testRunId,
       address: "Calle 75 Sur # 14-20",
       phone: "3109876543",
       commissionName: "Deportes y Recreación",
@@ -82,7 +113,7 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
   it("permite programar una asamblea comunitaria y guardarla en el sistema", async () => {
     const caller = createCaller();
     const result = await caller.assemblies.create({
-      title: "Asamblea Extraordinaria Presupuesto 2026",
+      title: testAssemblyTitle,
       assemblyType: "extraordinaria",
       scheduledAt: new Date("2026-10-01T14:00:00Z"),
       location: "Salón Comunal Bellavista",
@@ -103,7 +134,7 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
     );
     const endsAt = new Date(startsAt.getTime() + 1000 * 60 * 60 * 6);
     const result = await caller.reservations.create({
-      eventName: "Reunión de Integración Comunitaria",
+      eventName: testReservationName,
       startsAt,
       endsAt,
       applicantType: "afiliado",

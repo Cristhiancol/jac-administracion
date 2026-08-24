@@ -3,6 +3,7 @@ import "@testing-library/jest-dom/vitest";
 import React from "react";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { buildAffiliateQrPayload } from "@/lib/affiliate-qr";
 import { DigitalAffiliateCard } from "./DigitalAffiliateCard";
 
 describe("carnet QR de afiliado", () => {
@@ -32,5 +33,9 @@ describe("carnet QR de afiliado", () => {
       "institutional-token",
     );
     expect(within(card).queryByRole("img", { name: /Código QR del carnet digital/i })).toBeNull();
+
+    const payload = buildAffiliateQrPayload({ code: "AF-1991", qrToken: "TOKEN-INSTITUCIONAL-1991" });
+    expect(payload).toBe("JAC-BV91-TOKEN-INSTITUCIONAL-1991");
+    expect(payload).not.toContain("123456789");
   });
 });

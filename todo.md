@@ -92,5 +92,9 @@
 - [x] Añadir una prueba de interfaz que ejercite el overlay de Afiliados y confirme que su payload QR no contiene la cédula.
 - [x] Aislar los renders de la prueba de overlay QR para evitar credenciales duplicadas entre casos de interfaz.
 - [x] Marcar y comprobar en el overlay que el patrón QR se construye desde un identificador institucional, no desde la cédula.
-- [ ] Reiniciar la vista previa después de la corrección de privacidad del QR y verificar explícitamente que el carnet administrativo usa token institucional y no cédula.
+- [x] Reiniciar la vista previa después de la corrección de privacidad del QR y verificar explícitamente que el carnet administrativo usa token institucional y no cédula.
 - [x] Completar el commit final de la integración de privacidad del QR, hacer push exitoso a `user_github/main` y verificar el hash remoto resultante con `git status` limpio.
+- [x] Evitar que las pruebas de persistencia dejen afiliados y reservas de prueba acumulados en la base de datos visible de la aplicación.
+- [x] Sanear los registros de prueba repetidos creados durante la validación y confirmar la vista previa con datos comunitarios no duplicados.
+- [x] Añadir evidencia automatizada de que el carnet administrativo usa una fuente QR institucional y no incorpora la cédula.
+- [x] Comprobar por consulta y vista previa que Afiliados y Reservas no contienen registros de prueba duplicados después del saneamiento.

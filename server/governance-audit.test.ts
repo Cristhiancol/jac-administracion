@@ -1,5 +1,21 @@
-import { describe, expect, it } from "vitest";
+import { afterAll, describe, expect, it } from "vitest";
+import { eq } from "drizzle-orm";
+import { assemblies, facilityReservations } from "../drizzle/schema";
+import { getDb } from "./db";
 import { appRouter } from "./routers";
+
+const testRunId = `${Date.now()}${Math.floor(Math.random() * 100000)}`;
+const testMarker = `[PRUEBA-AUTOMATIZADA-${testRunId}]`;
+const testAssemblyTitle = `${testMarker} Asamblea Ordinaria General 30 de Agosto`;
+const testReservationName = `${testMarker} Celebración Comunitaria Día de la Familia`;
+
+afterAll(async () => {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.delete(facilityReservations).where(eq(facilityReservations.eventName, testReservationName));
+  await db.delete(assemblies).where(eq(assemblies.title, testAssemblyTitle));
+});
 
 function createAdminCaller() {
   return appRouter.createCaller({
@@ -68,7 +84,7 @@ describe("Auditoría de Gobernabilidad, Control de Usuarios y Registro QR de Asa
   it("permite la creación de asambleas y la generación automática de código QR de asistencia", async () => {
     const adminCaller = createAdminCaller();
     const assemblyResult = await adminCaller.assemblies.create({
-      title: "Asamblea Ordinaria General 30 de Agosto",
+      title: testAssemblyTitle,
       assemblyType: "ordinaria",
       scheduledAt: new Date("2026-08-30T14:00:00Z"),
       location: "Salón Comunal Bellavista 1991",
@@ -93,18 +109,26 @@ describe("Auditoría de Gobernabilidad, Control de Usuarios y Registro QR de Asa
 
   it("confirma que las solicitudes de reserva de salón generan recaudos y requieren confirmación de la tesorería", async () => {
     const adminCaller = createAdminCaller();
+    const startsAt = new Date(Date.UTC(2037, 10, 1 + Math.floor(Math.random() * 25), 10, 0, 0));
+    const endsAt = new Date(startsAt.getTime() + 8 * 60 * 60 * 1000);
     const reservationResult = await adminCaller.reservations.create({
-      eventName: "Celebración Comunitaria Día de la Familia",
-      startsAt: new Date("2026-09-20T10:00:00Z"),
-      endsAt: new Date("2026-09-20T18:00:00Z"),
+      eventName: testReservationName,
+      startsAt,
+      endsAt,
       applicantType: "afiliado",
       amount: "30000",
     });
 
     expect(reservationResult.success).toBe(true);
 
+    const db = await getDb();
+    const testReservation = db
+      ? (await db.select().from(facilityReservations).where(eq(facilityReservations.eventName, testReservationName)).limit(1))[0]
+      : undefined;
+    if (!testReservation) throw new Error("No se encontró la reserva temporal de la auditoría.");
+
     const confirmResult = await adminCaller.finance.confirmReservationIncome({
-      reservationId: 1,
+      reservationId: testReservation.id,
       receiptCode: "RECIBO-JAC-00892",
     });
     expect(confirmResult.success).toBe(true);
