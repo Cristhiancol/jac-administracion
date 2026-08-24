@@ -365,25 +365,28 @@ function DignatariosAssignmentSection() {
 
   // Combine registered users & affiliates so EVERY affiliate can be selected
   const allSelectablePeople = useMemo(() => {
-    const list: Array<{ id: number; name: string; tag: string }> = [];
+    const list: Array<{ id: number; selectValue: string; name: string; tag: string; isAffiliate: boolean }> = [];
 
     // Add current dignatarios & users
     dignatarios.forEach((d) => {
       list.push({
         id: d.id,
+        selectValue: `user_${d.id}`,
         name: `${d.name || d.email}`,
         tag: `Dignatario - ${d.jacRole}`,
+        isAffiliate: false,
       });
     });
 
     // Add all affiliates from Libro de Afiliados
     affiliates.forEach((aff) => {
-      // Check if not already added by ID
       if (!list.some((item) => item.name.includes(aff.fullName))) {
         list.push({
-          id: aff.id + 1000, // Safe id mapping
+          id: aff.id,
+          selectValue: `affiliate_${aff.id}`,
           name: `${aff.fullName} (C.C. ${aff.cedula})`,
           tag: `Afiliado - ${aff.commissionName || "Sin comité"}`,
+          isAffiliate: true,
         });
       }
     });
@@ -397,11 +400,14 @@ function DignatariosAssignmentSection() {
       toast.error("Selecciona un usuario o afiliado para asignar cargo.");
       return;
     }
-    const realId = Number(selectedUserId) > 1000 ? Number(selectedUserId) - 1000 : Number(selectedUserId);
+    const isAffiliate = selectedUserId.startsWith("affiliate_");
+    const realId = Number(selectedUserId.replace("user_", "").replace("affiliate_", ""));
+
     assignRoleMutation.mutate({
       userId: realId,
       jacRole: selectedJacRole,
       role: selectedRole,
+      isAffiliate,
     });
   };
 
@@ -436,8 +442,8 @@ function DignatariosAssignmentSection() {
                   required
                 >
                   <option value="">Seleccionar afiliado o dignatario...</option>
-                  {allSelectablePeople.map((person: { id: number; name: string; tag: string }) => (
-                    <option key={person.id} value={person.id}>
+                  {allSelectablePeople.map((person: { id: number; selectValue: string; name: string; tag: string }) => (
+                    <option key={person.selectValue} value={person.selectValue}>
                       {person.name} [{person.tag}]
                     </option>
                   ))}
