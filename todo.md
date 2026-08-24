@@ -36,3 +36,9 @@
 - [x] Resolver la discrepancia entre la dirección confirmada (Carrera 54D # 167B-11) y la ubicación de la JAC en Usme antes de fijar coordenadas definitivas del mapa.
 - [x] Sustituir el mapa provisional por el embed oficial confirmado con coordenadas 4.504752602911481, -74.1068319118239 y enlace de Google Maps proporcionado por la Directiva.
 - [x] Eliminar los mensajes residuales de validación pendiente del inicio y pie de página cuando la ficha institucional esté verificada.
+- [x] Sustituir la cédula por el token QR institucional como fuente del patrón SVG de credenciales digitales.
+- [x] Añadir una prueba que demuestre que el contenido de QR no incluye la cédula del afiliado.
+- [ ] Validar, compilar, reiniciar la vista previa y sincronizar en Git la corrección de privacidad del QR.
+- [x] Hacer idempotentes las pruebas de afiliados y reservas para que no colisionen con datos persistidos durante la validación del QR.
+- [ ] Hacer commit y push de la corrección QR y las pruebas idempotentes, y verificar que el árbol de trabajo quede limpio.
+- [ ] Verificar la vista previa posterior al push, confirmando que el QR utiliza token institucional y no cédula.

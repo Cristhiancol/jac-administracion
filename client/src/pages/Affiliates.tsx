@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import { JacShell } from "@/components/jac/JacShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
+import { buildAffiliateQrPayload } from "@/lib/affiliate-qr";
 import { useAuth } from "@/_core/hooks/useAuth";
 import {
   Upload,
@@ -341,7 +342,10 @@ export default function Affiliates() {
                           </div>
                           {activeQr === affiliate.cedula && (
                             <div className="absolute right-10 mt-2 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center gap-2">
-                              <LocalQrCode data={`JAC-BV91-${affiliate.cedula}`} size={100} />
+                              <LocalQrCode
+                                data={buildAffiliateQrPayload({ code: affiliate.code, qrToken: affiliate.qrToken })}
+                                size={100}
+                              />
                               <span className="text-[11px] font-mono font-bold text-muted-foreground tracking-wider">
                                 C.C. {affiliate.cedula}
                               </span>

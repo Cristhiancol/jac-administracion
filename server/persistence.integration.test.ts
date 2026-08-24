@@ -63,10 +63,11 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
 
   it("permite registrar un nuevo afiliado y guardarlo en el libro", async () => {
     const caller = createCaller();
+    const uniqueId = `${Date.now()}${Math.floor(Math.random() * 100000)}`;
     const result = await caller.affiliates.create({
-      code: "AF-999",
+      code: `AF-${uniqueId.slice(-8)}`,
       fullName: "Carlos Alberto Rodríguez",
-      cedula: "1018456789",
+      cedula: uniqueId,
       address: "Calle 75 Sur # 14-20",
       phone: "3109876543",
       commissionName: "Deportes y Recreación",
@@ -97,10 +98,14 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
 
   it("permite crear una reserva para el salón comunal y guardarla en el sistema", async () => {
     const caller = createCaller();
+    const startsAt = new Date(
+      Date.UTC(2037, 0, 1 + Math.floor(Math.random() * 300), 10, Math.floor(Math.random() * 60), 0, 0)
+    );
+    const endsAt = new Date(startsAt.getTime() + 1000 * 60 * 60 * 6);
     const result = await caller.reservations.create({
       eventName: "Reunión de Integración Comunitaria",
-      startsAt: new Date("2026-11-05T10:00:00Z"),
-      endsAt: new Date("2026-11-05T16:00:00Z"),
+      startsAt,
+      endsAt,
       applicantType: "afiliado",
       amount: "50000",
     });
