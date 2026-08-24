@@ -78,3 +78,7 @@
 - [x] Adaptar la prueba de carnet QR al control de Afiliados incorporado por la actualización remota y restablecer la suite de fusión.
 - [x] Confirmar la fusión de `user_github/main`, publicar el hash resultante y comprobar que el árbol de trabajo quede consistente.
 - [x] Corregir la compatibilidad JSX del componente de logo oficial en las pruebas de interfaz.
+- [x] Resolver los conflictos de Afiliados y Finanzas preservando el QR local basado en token institucional y los cambios de roles administrativos.
+- [x] Eliminar la dependencia externa de QR basada en cédula del carnet digital durante la fusión.
+- [x] Restablecer el helper QR institucional y las importaciones del modelo de afiliados requeridas por la fusión.
+- [x] Adaptar las pruebas del carnet digital y de Finanzas a la credencial QR local y al snapshot de reservas incorporados por la fusión.

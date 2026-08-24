@@ -19,10 +19,11 @@ export const institutionalRouter = router({
         userId: z.number().int().positive(),
         jacRole: z.enum(["directiva", "coordinador_comite", "tesorero_fiscal", "secretario", "afiliado"]),
         role: z.enum(["user", "admin"]),
+        isAffiliate: z.boolean().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      await updateUserJacRole(input.userId, input.jacRole, input.role);
+      await updateUserJacRole(input.userId, input.jacRole, input.role, input.isAffiliate);
       return { success: true };
     }),
 });

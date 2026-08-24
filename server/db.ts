@@ -1,6 +1,7 @@
 import { and, desc, eq, gt, inArray, lt } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
+  affiliates,
   commissions,
   facilityReservations,
   financialBudgets,
@@ -209,15 +210,22 @@ export async function getAssignableJacUsers() {
     .limit(100);
 }
 
+export const localDignatariosStore: Array<{
+  id: number;
+  name: string;
+  email: string;
+  role: "admin" | "user";
+  jacRole: "directiva" | "coordinador_comite" | "tesorero_fiscal" | "secretario" | "afiliado";
+  lastSignedIn: Date;
+}> = [
+  { id: 1, name: "Cristhian Benitez", email: "cristiancoli50@gmail.com", role: "admin", jacRole: "directiva", lastSignedIn: new Date() },
+  { id: 2, name: "Carlos Alberto Rodríguez", email: "1018456789@bellavista1991.org", role: "admin", jacRole: "coordinador_comite", lastSignedIn: new Date() },
+];
+
 export async function getJacDignatarios() {
   const db = await getDb();
   if (!db) {
-    return [
-      { id: 1, name: "Presidente Directiva JAC", email: "directiva@bellavista1991.org", role: "admin" as const, jacRole: "directiva" as const, lastSignedIn: new Date() },
-      { id: 2, name: "Tesorero / Fiscal Comunal", email: "tesoreria@bellavista1991.org", role: "admin" as const, jacRole: "tesorero_fiscal" as const, lastSignedIn: new Date() },
-      { id: 3, name: "Secretario General JAC", email: "secretaria@bellavista1991.org", role: "user" as const, jacRole: "secretario" as const, lastSignedIn: new Date() },
-      { id: 4, name: "Coordinador Comité Deportes", email: "deportes@bellavista1991.org", role: "user" as const, jacRole: "coordinador_comite" as const, lastSignedIn: new Date() },
-    ];
+    return localDignatariosStore;
   }
   const result = await db
     .select({ id: users.id, name: users.name, email: users.email, role: users.role, jacRole: users.jacRole, lastSignedIn: users.lastSignedIn })
@@ -226,12 +234,7 @@ export async function getJacDignatarios() {
     .limit(100);
 
   if (result.length === 0) {
-    return [
-      { id: 1, name: "Presidente Directiva JAC", email: "directiva@bellavista1991.org", role: "admin" as const, jacRole: "directiva" as const, lastSignedIn: new Date() },
-      { id: 2, name: "Tesorero / Fiscal Comunal", email: "tesoreria@bellavista1991.org", role: "admin" as const, jacRole: "tesorero_fiscal" as const, lastSignedIn: new Date() },
-      { id: 3, name: "Secretario General JAC", email: "secretaria@bellavista1991.org", role: "user" as const, jacRole: "secretario" as const, lastSignedIn: new Date() },
-      { id: 4, name: "Coordinador Comité Deportes", email: "deportes@bellavista1991.org", role: "user" as const, jacRole: "coordinador_comite" as const, lastSignedIn: new Date() },
-    ];
+    return localDignatariosStore;
   }
   return result;
 }
@@ -239,13 +242,68 @@ export async function getJacDignatarios() {
 export async function updateUserJacRole(
   userId: number,
   jacRole: "directiva" | "coordinador_comite" | "tesorero_fiscal" | "secretario" | "afiliado",
-  role: "user" | "admin"
+  role: "user" | "admin",
+  isAffiliateId?: boolean
 ) {
   const db = await getDb();
   if (db) {
-    await db.update(users).set({ jacRole, role, updatedAt: new Date() }).where(eq(users.id, userId));
+    if (isAffiliateId) {
+      const aff = await db.select().from(affiliates).where(eq(affiliates.id, userId)).limit(1);
+      if (aff[0]) {
+        const openId = `affiliate_${aff[0].cedula || aff[0].code || userId}`;
+        const existing = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+        if (existing[0]) {
+          await db.update(users).set({ jacRole, role, name: aff[0].fullName, updatedAt: new Date() }).where(eq(users.id, existing[0].id));
+        } else {
+          await db.insert(users).values({
+            openId,
+            name: aff[0].fullName,
+            email: `${aff[0].cedula}@bellavista1991.org`,
+            jacRole,
+            role,
+            lastSignedIn: new Date(),
+          });
+        }
+        return;
+      }
+    }
+
+    const existing = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (existing[0]) {
+      await db.update(users).set({ jacRole, role, updatedAt: new Date() }).where(eq(users.id, userId));
+    } else {
+      const aff = await db.select().from(affiliates).where(eq(affiliates.id, userId)).limit(1);
+      if (aff[0]) {
+        const openId = `affiliate_${aff[0].cedula || aff[0].code || userId}`;
+        await db.insert(users).values({
+          openId,
+          name: aff[0].fullName,
+          email: `${aff[0].cedula}@bellavista1991.org`,
+          jacRole,
+          role,
+          lastSignedIn: new Date(),
+        }).onDuplicateKeyUpdate({
+          set: { jacRole, role, name: aff[0].fullName, updatedAt: new Date() }
+        });
+      }
+    }
   } else {
-    console.log("[Users] Role updated in local mode:", userId, jacRole, role);
+    // In-memory fallback for local mode
+    const idx = localDignatariosStore.findIndex(d => d.id === userId);
+    if (idx >= 0) {
+      localDignatariosStore[idx].jacRole = jacRole;
+      localDignatariosStore[idx].role = role;
+    } else {
+      const newDignatario = {
+        id: localDignatariosStore.length + 10,
+        name: `Dignatario Afiliado (${userId})`,
+        email: `afiliado_${userId}@bellavista1991.org`,
+        role,
+        jacRole,
+        lastSignedIn: new Date(),
+      };
+      localDignatariosStore.push(newDignatario);
+    }
   }
 }
 

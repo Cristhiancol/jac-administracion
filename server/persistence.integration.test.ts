@@ -98,10 +98,12 @@ describe("Verificación de Guardado y Persistencia de Información (End-to-End)"
 
   it("permite crear una reserva para el salón comunal y guardarla en el sistema", async () => {
     const caller = createCaller();
+    const startsAt = new Date(Date.UTC(2030, 0, 1, 8) + Math.floor(Math.random() * 20_000_000) * 1000);
+    const endsAt = new Date(startsAt.getTime() + 2 * 60 * 60 * 1000);
     const result = await caller.reservations.create({
       eventName: "Reunión de Integración Comunitaria",
-      startsAt: new Date("2026-11-05T10:00:00Z"),
-      endsAt: new Date("2026-11-05T16:00:00Z"),
+      startsAt,
+      endsAt,
       applicantType: "afiliado",
       amount: "50000",
     });

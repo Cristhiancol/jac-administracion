@@ -9,7 +9,13 @@ describe("carnet QR de afiliado", () => {
   it("muestra el logo oficial, identidad del afiliado y código QR", () => {
     render(
       <DigitalAffiliateCard
-        affiliate={{ code: "AF-1991", fullName: "María Bellavista", cedula: "123456789", status: "activo" }}
+        affiliate={{
+          code: "AF-1991",
+          fullName: "María Bellavista",
+          cedula: "123456789",
+          qrToken: "TOKEN-INSTITUCIONAL-1991",
+          status: "activo",
+        }}
       />,
     );
 
@@ -21,9 +27,10 @@ describe("carnet QR de afiliado", () => {
     expect(
       within(card).getByRole("img", { name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i }),
     ).toHaveAttribute("src", "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp");
-    expect(within(card).getByRole("img", { name: /Código QR del carnet digital de María Bellavista/i })).toHaveAttribute(
-      "src",
-      expect.stringContaining("data=123456789"),
+    expect(within(card).getByTestId("affiliate-card-local-qr")).toHaveAttribute(
+      "data-credential-source",
+      "institutional-token",
     );
+    expect(within(card).queryByRole("img", { name: /Código QR del carnet digital/i })).toBeNull();
   });
 });

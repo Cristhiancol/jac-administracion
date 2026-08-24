@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import "@testing-library/jest-dom/vitest";
 import React from "react";
-import { fireEvent, render, screen, within } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 const affiliate = {
   id: 1,
@@ -40,31 +40,33 @@ vi.mock("@/components/jac/JacShell", () => ({
 
 import Affiliates from "./Affiliates";
 
+afterEach(() => {
+  cleanup();
+  window.history.replaceState({}, "", "/");
+});
+
+function expectLocalCard(card: HTMLElement) {
+  expect(within(card).getByText("Carnet digital")).toBeVisible();
+  expect(within(card).getByText("María Bellavista")).toBeVisible();
+  expect(
+    within(card).getByRole("img", { name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i }),
+  ).toHaveAttribute("src", "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp");
+  expect(within(card).getByTestId("affiliate-card-local-qr")).toHaveAttribute(
+    "data-credential-source",
+    "affiliate-code",
+  );
+}
+
 describe("interacción de carnet QR de afiliados", () => {
   it("abre el overlay real y muestra el emblema oficial actualizado", () => {
     render(<Affiliates />);
-
     fireEvent.click(screen.getByTitle("Generar QR Carnet"));
-
-    const card = screen.getByTestId("affiliate-qr-card");
-    expect(within(card).getByText("Carnet digital")).toBeVisible();
-    expect(within(card).getByText("María Bellavista")).toBeVisible();
-    expect(
-      within(card).getByRole("img", { name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i }),
-    ).toHaveAttribute("src", "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp");
-    expect(within(card).getByRole("img", { name: /Código QR del carnet digital de María Bellavista/i })).toBeVisible();
+    expectLocalCard(screen.getByTestId("affiliate-qr-card"));
   });
 
   it("abre el carnet oficial cuando la cédula conocida llega en el parámetro administrativo", () => {
     window.history.replaceState({}, "", "/afiliados?carnet=123456789");
     render(<Affiliates />);
-
-    const card = screen.getAllByTestId("affiliate-qr-card").at(-1)!;
-    expect(within(card).getByText("María Bellavista")).toBeVisible();
-    expect(
-      within(card).getByRole("img", { name: /Emblema oficial JAC Bellavista 1991 - Todos Somos Comunidad/i }),
-    ).toHaveAttribute("src", "/manus-storage/logo_jac_bellavista_colores_oficiales_112ab20c.webp");
-    expect(within(card).getByRole("img", { name: /Código QR del carnet digital de María Bellavista/i })).toBeVisible();
-    window.history.replaceState({}, "", "/");
+    expectLocalCard(screen.getByTestId("affiliate-qr-card"));
   });
 });

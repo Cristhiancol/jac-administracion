@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { JacShell } from "@/components/jac/JacShell";
 import { trpc } from "@/lib/trpc";
 import { 
@@ -32,7 +32,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Trophy, 
-  Medal, 
   Flag, 
   Swords, 
   Heart, 
@@ -46,8 +45,6 @@ import {
   ScrollText,
   Loader2,
   Sparkles,
-  Flame,
-  Zap,
   Award
 } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";

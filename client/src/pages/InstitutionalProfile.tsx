@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { BadgeInfo, FileCheck2, Save, ShieldCheck, QrCode, Award, Users, Crown, ShieldAlert, FileText, CheckCircle2, UserCheck } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { toast } from "sonner";
 import { JacLogo } from "@/components/JacLogo";
 
@@ -340,6 +340,9 @@ function DignatariosAssignmentSection() {
   const dignatariosQuery = trpc.institutional.dignatarios.useQuery(undefined, {
     enabled: isAuthenticated,
   });
+  const affiliatesQuery = trpc.affiliates.list.useQuery(undefined, {
+    enabled: isAuthenticated,
+  });
   const utils = trpc.useUtils();
 
   const [selectedUserId, setSelectedUserId] = useState<string>("");
@@ -348,24 +351,63 @@ function DignatariosAssignmentSection() {
 
   const assignRoleMutation = trpc.institutional.assignRole.useMutation({
     onSuccess: async () => {
-      await utils.institutional.dignatarios.invalidate();
+      await Promise.all([
+        utils.institutional.dignatarios.invalidate(),
+        utils.affiliates.list.invalidate(),
+      ]);
       toast.success("Cargo administrativo y rol asignado correctamente.");
     },
     onError: (error) => toast.error(error.message),
   });
 
   const dignatarios = dignatariosQuery.data ?? [];
+  const affiliates = affiliatesQuery.data ?? [];
+
+  // Combine registered users & affiliates so EVERY affiliate can be selected
+  const allSelectablePeople = useMemo(() => {
+    const list: Array<{ id: number; selectValue: string; name: string; tag: string; isAffiliate: boolean }> = [];
+
+    // Add current dignatarios & users
+    dignatarios.forEach((d) => {
+      list.push({
+        id: d.id,
+        selectValue: `user_${d.id}`,
+        name: `${d.name || d.email}`,
+        tag: `Dignatario - ${d.jacRole}`,
+        isAffiliate: false,
+      });
+    });
+
+    // Add all affiliates from Libro de Afiliados
+    affiliates.forEach((aff) => {
+      if (!list.some((item) => item.name.includes(aff.fullName))) {
+        list.push({
+          id: aff.id,
+          selectValue: `affiliate_${aff.id}`,
+          name: `${aff.fullName} (C.C. ${aff.cedula})`,
+          tag: `Afiliado - ${aff.commissionName || "Sin comité"}`,
+          isAffiliate: true,
+        });
+      }
+    });
+
+    return list;
+  }, [dignatarios, affiliates]);
 
   const handleAssign = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedUserId) {
-      toast.error("Selecciona un usuario para asignar cargo.");
+      toast.error("Selecciona un usuario o afiliado para asignar cargo.");
       return;
     }
+    const isAffiliate = selectedUserId.startsWith("affiliate_");
+    const realId = Number(selectedUserId.replace("user_", "").replace("affiliate_", ""));
+
     assignRoleMutation.mutate({
-      userId: Number(selectedUserId),
+      userId: realId,
       jacRole: selectedJacRole,
       role: selectedRole,
+      isAffiliate,
     });
   };
 
@@ -388,21 +430,21 @@ function DignatariosAssignmentSection() {
         {isAuthenticated && (
           <form onSubmit={handleAssign} className="p-5 bg-muted/40 rounded-xl border border-border space-y-4">
             <p className="text-xs font-extrabold uppercase tracking-wider text-[#0F4C81] dark:text-blue-400">
-              Asignar o Modificar Cargo Administrativo
+              Asignar o Modificar Cargo Administrativo (Todos los Afiliados)
             </p>
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
-                <Label className="text-xs font-bold mb-1.5 block">Usuario / Dignatario *</Label>
+                <Label className="text-xs font-bold mb-1.5 block">Usuario / Afiliado a Asignar *</Label>
                 <select
                   value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
                   className="w-full h-10 rounded-xl border border-input bg-background px-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#0F4C81]"
                   required
                 >
-                  <option value="">Seleccionar dignatario...</option>
-                  {dignatarios.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name || d.email} ({d.jacRole})
+                  <option value="">Seleccionar afiliado o dignatario...</option>
+                  {allSelectablePeople.map((person: { id: number; selectValue: string; name: string; tag: string }) => (
+                    <option key={person.selectValue} value={person.selectValue}>
+                      {person.name} [{person.tag}]
                     </option>
                   ))}
                 </select>
