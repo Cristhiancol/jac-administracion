@@ -15,12 +15,10 @@ import {
   ChevronRight,
   Clock,
   DollarSign,
-  Info,
   PackageCheck,
   Plus,
   Save,
   Settings,
-  Sparkles,
   Volume2,
   XCircle,
 } from "lucide-react";

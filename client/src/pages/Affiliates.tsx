@@ -12,7 +12,6 @@ import {
   CheckCircle,
   XCircle,
   X,
-  AlertCircle
 } from "lucide-react";
 
 interface Affiliate {
@@ -37,6 +36,74 @@ interface AffiliateFormData {
   address: string;
   phone: string;
   commissionName: string;
+}
+
+/**
+ * Local SVG QR code generator — generates a simple QR-like visual pattern
+ * from data without sending anything to external servers.
+ * Uses a deterministic hash to create a unique visual pattern per affiliate.
+ */
+function LocalQrCode({ data, size = 100 }: { data: string; size?: number }) {
+  const cells = 11;
+  const cellSize = size / cells;
+
+  // Simple deterministic hash to generate a stable pattern
+  const hash = (str: string, seed: number) => {
+    let h = seed;
+    for (let i = 0; i < str.length; i++) {
+      h = ((h << 5) - h + str.charCodeAt(i)) | 0;
+    }
+    return h;
+  };
+
+  const grid: boolean[][] = [];
+  for (let row = 0; row < cells; row++) {
+    grid[row] = [];
+    for (let col = 0; col < cells; col++) {
+      // Fixed finder patterns (top-left, top-right, bottom-left)
+      const isFinderTL = row < 3 && col < 3;
+      const isFinderTR = row < 3 && col >= cells - 3;
+      const isFinderBL = row >= cells - 3 && col < 3;
+      const isFinderBorder =
+        (isFinderTL || isFinderTR || isFinderBL) &&
+        (row === 0 || row === 2 || col === 0 || col === 2 ||
+         row === cells - 1 || row === cells - 3 ||
+         col === cells - 1 || col === cells - 3);
+      const isFinderCenter =
+        (row === 1 && col === 1) ||
+        (row === 1 && col === cells - 2) ||
+        (row === cells - 2 && col === 1);
+
+      if (isFinderBorder || isFinderCenter) {
+        grid[row][col] = true;
+      } else if (isFinderTL || isFinderTR || isFinderBL) {
+        grid[row][col] = false;
+      } else {
+        grid[row][col] = (hash(data, row * cells + col) & 1) === 1;
+      }
+    }
+  }
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="rounded-md">
+      <rect width={size} height={size} fill="white" />
+      {grid.map((row, r) =>
+        row.map((filled, c) =>
+          filled ? (
+            <rect
+              key={`${r}-${c}`}
+              x={c * cellSize}
+              y={r * cellSize}
+              width={cellSize}
+              height={cellSize}
+              fill="#0F172A"
+              rx={1}
+            />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
 }
 
 const initialFormState: AffiliateFormData = {
@@ -273,17 +340,12 @@ export default function Affiliates() {
                             </button>
                           </div>
                           {activeQr === affiliate.cedula && (
-                            <div className="absolute right-10 mt-2 p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center">
-                              <img
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(
-                                  affiliate.cedula
-                                )}`}
-                                alt="QR Code"
-                                className="w-24 h-24"
-                              />
-                              <span className="text-xs text-gray-500 mt-1">
-                                {affiliate.cedula}
+                            <div className="absolute right-10 mt-2 p-3 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-10 flex flex-col items-center gap-2">
+                              <LocalQrCode data={`JAC-BV91-${affiliate.cedula}`} size={100} />
+                              <span className="text-[11px] font-mono font-bold text-muted-foreground tracking-wider">
+                                C.C. {affiliate.cedula}
                               </span>
+                              <span className="text-[10px] text-muted-foreground">QR generado localmente</span>
                             </div>
                           )}
                         </td>

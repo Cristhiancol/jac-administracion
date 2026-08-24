@@ -9,10 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { trpc } from "@/lib/trpc";
 import { calculateProgress } from "@/lib/jac-calculations";
-import { OFFICIAL_WORK_PLAN_2026_2030, WorkPlanAxis } from "@shared/official-workplan-2026-2030";
+import { OFFICIAL_WORK_PLAN_2026_2030 } from "@shared/official-workplan-2026-2030";
 import {
   Building2,
-  CalendarRange,
   ClipboardPenLine,
   Compass,
   Home,
